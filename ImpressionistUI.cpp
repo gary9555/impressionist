@@ -267,7 +267,7 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 //-----------------------------------------------------------
 void ImpressionistUI::cb_about(Fl_Menu_* o, void* v) 
 {
-	fl_message("Impressionist FLTK version for CS341, Spring 2002");
+	fl_message("Impressionist for COMP4411, Fall 2015\n Authored by Gary Wen");
 }
 
 //------- UI should keep track of the current for all the controls for answering the query from Doc ---------
@@ -287,7 +287,11 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 	pDoc->setBrushType(type);
 }
 
+void ImpressionistUI::cb_strokeDirChoice(Fl_Widget* o, void* v)
+{
 
+
+}
 
 
 
@@ -300,13 +304,7 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 //-------------------------------------------------------------
 void ImpressionistUI::cb_colorSpaceChoice(Fl_Widget* o, void* v)
 {
-	ImpressionistUI* pUI = ((ImpressionistUI *)(o->user_data()));
-	ImpressionistDoc* pDoc = pUI->getDocument();
-
-	int type = (int)v;
-
-
-	pDoc->setColorSpace(type);
+	
 }
 
 
@@ -347,20 +345,28 @@ void ImpressionistUI::cb_sizeSlides(Fl_Widget* o, void* v)
 //-----------------------------------------------------------
 void ImpressionistUI::cb_lineWidthSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nSize = int(((Fl_Slider *)o)->value());
+	((ImpressionistUI*)(o->user_data()))->m_nLineWidth = int(((Fl_Slider *)o)->value());
 }
 
 
 void ImpressionistUI::cb_lineAngleSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nSize = int(((Fl_Slider *)o)->value());
+	((ImpressionistUI*)(o->user_data()))->m_nLineAngle = int(((Fl_Slider *)o)->value());
 }
 
 void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nSize = int(((Fl_Slider *)o)->value());
+	((ImpressionistUI*)(o->user_data()))->m_nAlpha = int(((Fl_Slider *)o)->value());
 }
 
+//---The light button callback---------------------
+void ImpressionistUI::cb_EdgeClippingButton(Fl_Widget* o, void* v)
+{
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+
+	if (pUI->m_bEdgeClipping == TRUE) pUI->m_bEdgeClipping = FALSE;
+	else pUI->m_bEdgeClipping = TRUE;
+}
 
 
 
@@ -459,12 +465,24 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {0}
 };
 
+
+// Stroke Direction menu definition
+Fl_Menu_Item ImpressionistUI::strokeDirMenu[] = {
+	{ "Slider/Right Mouse", FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_strokeDirChoice, (void *)ONE },
+	{ "Gradient", FL_ALT + 'g', (Fl_Callback *)ImpressionistUI::cb_strokeDirChoice, (void *)TWO },
+	{ "Brush Direction", FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_strokeDirChoice, (void *)THREE },
+	{ 0 }
+};
+
+
+
+
 // Color Space choice menu definition
 Fl_Menu_Item ImpressionistUI::colorSpaceMenu[] = {
-	{ "rgb", FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)BRUSH_POINTS },
-	{ "byte", FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)BRUSH_LINES },
-	{ "hex", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)BRUSH_CIRCLES },
-	{ "hsv", FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)BRUSH_SCATTERED_POINTS },
+	{ "rgb", NULL, (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)ONE},
+	{ "byte", NULL, (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)TWO },
+	{ "hex", NULL, (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)THREE },
+	{ "hsv", NULL, (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)FOUR },
 	{ 0 }
 };
 
@@ -503,6 +521,10 @@ ImpressionistUI::ImpressionistUI() {
 	// init values
 
 	m_nSize = 10;
+	m_nLineWidth = 1;
+	m_nLineAngle = 0;
+	m_nAlpha = 1.00;
+	m_bEdgeClipping = TRUE;
 
 	// brush dialog definition
 	m_brushDialog = new Fl_Window(415, 335, "Brush Dialog");
@@ -510,7 +532,14 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushTypeChoice = new Fl_Choice(50,10,150,25,"&Brush");
 		m_BrushTypeChoice->user_data((void*)(this));	// record self to be used by static callback functions
 		m_BrushTypeChoice->menu(brushTypeMenu);
+		m_BrushTypeChoice->labelfont();
 		m_BrushTypeChoice->callback(cb_brushChoice);
+
+		//Stroke direction
+		m_StrokeDirChoice = new Fl_Choice(110, 45, 150, 25, "&Stroke Direction");
+		m_StrokeDirChoice->user_data((void*)(this));	// record self to be used by static callback functions
+		m_StrokeDirChoice->menu(strokeDirMenu);
+		m_StrokeDirChoice->callback(cb_strokeDirChoice);
 
 		//clear canvas button
 		m_ClearCanvasButton = new Fl_Button(240,10,150,25,"&Clear Canvas");
@@ -541,7 +570,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_LineWidthSlider->minimum(1);
 		m_LineWidthSlider->maximum(40);
 		m_LineWidthSlider->step(1);
-		m_LineWidthSlider->value(1);
+		m_LineWidthSlider->value(m_nLineWidth);
 		m_LineWidthSlider->align(FL_ALIGN_RIGHT);
 		m_LineWidthSlider->callback(cb_lineWidthSlides);
 
@@ -555,7 +584,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_LineAngleSlider->minimum(0);
 		m_LineAngleSlider->maximum(359);
 		m_LineAngleSlider->step(1);
-		m_LineAngleSlider->value(0);
+		m_LineAngleSlider->value(m_nLineAngle);
 		m_LineAngleSlider->align(FL_ALIGN_RIGHT);
 		m_LineAngleSlider->callback(cb_lineAngleSlides);
 
@@ -569,9 +598,14 @@ ImpressionistUI::ImpressionistUI() {
 		m_AlphaSlider->minimum(0.00);
 		m_AlphaSlider->maximum(1.00);
 		m_AlphaSlider->step(0.01);
-		m_AlphaSlider->value(1.00);
+		m_AlphaSlider->value(m_nAlpha);
 		m_AlphaSlider->align(FL_ALIGN_RIGHT);
 		m_AlphaSlider->callback(cb_alphaSlides);
+
+		// edge-clipping light button
+		m_EdgeClippingButton = new Fl_Light_Button(10, 200, 150, 25, "&Edge Clipping");
+		m_EdgeClippingButton->user_data((void*)(this));   // record self to be used by static callback functions
+		m_EdgeClippingButton->callback(cb_EdgeClippingButton);
 
 
     m_brushDialog->end();	
