@@ -243,6 +243,82 @@ void ImpressionistUI::cb_colors(Fl_Menu_* o, void* v)
 
 
 
+void ImpressionistUI::cb_paintly(Fl_Menu_* o, void* v){
+
+}
+
+void ImpressionistUI::cb_load_edge_image(Fl_Menu_* o, void* v){
+
+}
+
+void ImpressionistUI::cb_load_another_image(Fl_Menu_* o, void* v){
+
+}
+
+void ImpressionistUI::cb_originalImage(Fl_Menu_* o, void* v){
+
+}
+
+void ImpressionistUI::cb_edge_image(Fl_Menu_* o, void* v){
+
+}
+
+void ImpressionistUI::cb_another_image(Fl_Menu_* o, void* v){
+
+}
+
+void ImpressionistUI::cb_faster(Fl_Menu_* o, void* v){
+
+}
+
+void ImpressionistUI::cb_safer(Fl_Menu_* o, void* v){
+
+}
+
+void ImpressionistUI::cb_strokeDirChoice(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_colorSpaceChoice(Fl_Widget* o, void* v){
+	
+}
+
+void ImpressionistUI::cb_EdgeClippingButton(Fl_Widget* o, void* v)
+{
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+
+	if (pUI->m_bEdgeClipping == TRUE) pUI->m_bEdgeClipping = FALSE;
+	else pUI->m_bEdgeClipping = TRUE;
+}
+
+void ImpressionistUI::cb_AnotherGradientButton(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_spacingSlides(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_SizeRandButton(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_PaintButton(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_edgeThresSlides(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_DoItButton(Fl_Widget* o, void* v){
+
+}
+			
+					
+
+
+
 
 
 
@@ -287,25 +363,7 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 	pDoc->setBrushType(type);
 }
 
-void ImpressionistUI::cb_strokeDirChoice(Fl_Widget* o, void* v)
-{
 
-
-}
-
-
-
-
-
-//-------------------------------------------------------------
-// Sets the type of color space to use to the one chosen in the color space 
-// choice.  
-// Called by the UI when a color space is chosen in the color space choice
-//-------------------------------------------------------------
-void ImpressionistUI::cb_colorSpaceChoice(Fl_Widget* o, void* v)
-{
-	
-}
 
 
 
@@ -359,14 +417,7 @@ void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
 	((ImpressionistUI*)(o->user_data()))->m_nAlpha = int(((Fl_Slider *)o)->value());
 }
 
-//---The light button callback---------------------
-void ImpressionistUI::cb_EdgeClippingButton(Fl_Widget* o, void* v)
-{
-	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
 
-	if (pUI->m_bEdgeClipping == TRUE) pUI->m_bEdgeClipping = FALSE;
-	else pUI->m_bEdgeClipping = TRUE;
-}
 
 
 
@@ -443,11 +494,26 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
 		
 		{ "&Colors...",		FL_ALT + 'k', (Fl_Callback *)ImpressionistUI::cb_colors}, 
+		{ "&Paintly...", FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_paintly, 0, FL_MENU_DIVIDER },
+
+		{ "Load Edge Image...", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_load_edge_image },
+		{ "Load Another Image...", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image, 0, FL_MENU_DIVIDER },
 
 		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
 
-		{ "&Help",		0, 0, 0, FL_SUBMENU },
+	{ "&Display", 0, 0, 0, FL_SUBMENU },
+		{ "&Original Image", FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_originalImage },
+		{ "&Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_edge_image },
+		{ "&Another Image", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_another_image },
+		{ 0 },
+
+	{ "&Options", 0, 0, 0, FL_SUBMENU },
+		{ "&Faster", FL_ALT + 'f', (Fl_Callback *)ImpressionistUI::cb_faster },
+		{ "&Safer", FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_safer },
+		{ 0 },
+
+	{ "&Help",		0, 0, 0, FL_SUBMENU },
 		{ "&About",	FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_about },
 		{ 0 },
 
@@ -525,6 +591,8 @@ ImpressionistUI::ImpressionistUI() {
 	m_nLineAngle = 0;
 	m_nAlpha = 1.00;
 	m_bEdgeClipping = TRUE;
+	m_nSpacing = 4;
+	m_nEdgeThres = 200;
 
 	// brush dialog definition
 	m_brushDialog = new Fl_Window(415, 335, "Brush Dialog");
@@ -536,7 +604,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushTypeChoice->callback(cb_brushChoice);
 
 		//Stroke direction
-		m_StrokeDirChoice = new Fl_Choice(110, 45, 150, 25, "&Stroke Direction");
+		m_StrokeDirChoice = new Fl_Choice(110, 45, 160, 25, "&Stroke Direction");
 		m_StrokeDirChoice->user_data((void*)(this));	// record self to be used by static callback functions
 		m_StrokeDirChoice->menu(strokeDirMenu);
 		m_StrokeDirChoice->callback(cb_strokeDirChoice);
@@ -603,17 +671,67 @@ ImpressionistUI::ImpressionistUI() {
 		m_AlphaSlider->callback(cb_alphaSlides);
 
 		// edge-clipping light button
-		m_EdgeClippingButton = new Fl_Light_Button(10, 200, 150, 25, "&Edge Clipping");
+		m_EdgeClippingButton = new Fl_Light_Button(10, 200, 140, 25, "&Edge Clipping");
 		m_EdgeClippingButton->user_data((void*)(this));   // record self to be used by static callback functions
 		m_EdgeClippingButton->callback(cb_EdgeClippingButton);
+
+		// another gradient light button
+		m_AnotherGradientButton = new Fl_Light_Button(200, 200, 160, 25, "&Another Gradient");
+		m_AnotherGradientButton->user_data((void*)(this));   // record self to be used by static callback functions
+		m_AnotherGradientButton->callback(cb_AnotherGradientButton);
+
+		// Box 1
+		m_SpacingBox = new Fl_Box(FL_THIN_UP_BOX, 10, 235, 385, 40,NULL);
+		// Spacing slider 
+		m_SpacingSlider = new Fl_Value_Slider(20, 245, 145, 20, "Spacing");
+		m_SpacingSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_SpacingSlider->type(FL_HOR_NICE_SLIDER);
+		m_SpacingSlider->labelfont(FL_COURIER);
+		m_SpacingSlider->labelsize(12);
+		m_SpacingSlider->minimum(1);
+		m_SpacingSlider->maximum(16);
+		m_SpacingSlider->step(1);
+		m_SpacingSlider->value(m_nSpacing);
+		m_SpacingSlider->align(FL_ALIGN_RIGHT);
+		m_SpacingSlider->callback(cb_spacingSlides);
+		// Size Rand light button
+		m_SizeRandButton = new Fl_Light_Button(225, 243, 95, 25, "&Size Rand.");
+		m_SizeRandButton->user_data((void*)(this));   // record self to be used by static callback functions
+		m_SizeRandButton->callback(cb_SizeRandButton);
+		// Paint button
+		m_PaintButton = new Fl_Button(330, 243, 45, 25, "&Paint");
+		m_PaintButton->user_data((void*)(this));
+		m_PaintButton->callback(cb_PaintButton);
+		
+		// Box 2
+		m_EdgeThresBox = new Fl_Box(FL_THIN_UP_BOX, 10, 280, 385, 40, NULL);
+		// Spacing slider 
+		m_EdgeThresSlider = new Fl_Value_Slider(20, 290, 200, 20, "Edge Threshold");
+		m_EdgeThresSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_EdgeThresSlider->type(FL_HOR_NICE_SLIDER);
+		m_EdgeThresSlider->labelfont(FL_COURIER);
+		m_EdgeThresSlider->labelsize(12);
+		m_EdgeThresSlider->minimum(0);
+		m_EdgeThresSlider->maximum(500);
+		m_EdgeThresSlider->step(1);
+		m_EdgeThresSlider->value(m_nEdgeThres);
+		m_EdgeThresSlider->align(FL_ALIGN_RIGHT);
+		m_EdgeThresSlider->callback(cb_edgeThresSlides);
+		// Do it button
+		m_DoItButton = new Fl_Button(330, 288, 45, 25, "&Do it");
+		m_DoItButton->user_data((void*)(this));
+		m_DoItButton->callback(cb_DoItButton);
 
 
     m_brushDialog->end();	
 
 
 
+
+
 	// colors dialog definition
 	m_colorsDialog = new Fl_Window(400, 325, "Colors Selection");
+	
 		// Add a color space choice to the dialog
 		m_colorSpaceChoice = new Fl_Choice(50, 10, 150, 25, "&Colors");
 		m_colorSpaceChoice->user_data((void*)(this));	// record self to be used by static callback functions
@@ -636,7 +754,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->step(1);
 		m_BrushSizeSlider->value(m_nSize);
 		m_BrushSizeSlider->align(FL_ALIGN_RIGHT);
-		m_BrushSizeSlider->callback(cb_sizeSlides);
+		m_BrushSizeSlider->callback(cb_sizeSlides);	
 
 	m_brushDialog->end();
 
