@@ -47,29 +47,56 @@ public:
 
 	// for brush dialog
 	Fl_Window*			m_brushDialog;
-		Fl_Choice*			m_BrushTypeChoice;
-		Fl_Button*          m_ClearCanvasButton;
-		Fl_Choice*			m_StrokeDirChoice;
-		Fl_Slider*			m_BrushSizeSlider;
-		Fl_Slider*			m_LineWidthSlider;
-		Fl_Slider*			m_LineAngleSlider;
-		Fl_Slider*			m_AlphaSlider;
-		Fl_Light_Button*	m_EdgeClippingButton;
-		Fl_Light_Button*	m_AnotherGradientButton;
+	
+	Fl_Choice*			m_BrushTypeChoice;
+	Fl_Button*          m_ClearCanvasButton;
+	Fl_Choice*			m_StrokeDirChoice;
+	Fl_Slider*			m_BrushSizeSlider;
+	Fl_Slider*			m_LineWidthSlider;
+	Fl_Slider*			m_LineAngleSlider;
+	Fl_Slider*			m_AlphaSlider;
+	Fl_Light_Button*	m_EdgeClippingButton;
+	Fl_Light_Button*	m_AnotherGradientButton;
 		
-		Fl_Box*				m_SpacingBox;
-		Fl_Slider*			m_SpacingSlider;
-		Fl_Light_Button*	m_SizeRandButton;
-		Fl_Button*          m_PaintButton;
+	Fl_Box*				m_SpacingBox;
+	Fl_Slider*			m_SpacingSlider;
+	Fl_Light_Button*	m_SizeRandButton;
+	Fl_Button*          m_PaintButton;
 
-		Fl_Box*				m_EdgeThresBox;
-		Fl_Slider*			m_EdgeThresSlider;
-		Fl_Button*          m_DoItButton;
+	Fl_Box*				m_EdgeThresBox;
+	Fl_Slider*			m_EdgeThresSlider;
+	Fl_Button*          m_DoItButton;
 
 
-	// for colors dialog
+
+	// Colors dialog
 	Fl_Window*			m_colorsDialog;
 	Fl_Choice*			m_colorSpaceChoice;
+
+	
+	// Paintly Dialog
+	Fl_Window*			m_paintlyDialog;
+	Fl_Choice*			m_styleChoice;
+	Fl_Choice*			m_strokeChoice;
+	Fl_Button*          m_RunButton;
+
+	Fl_Box*				m_PaintlyBox;
+	Fl_Slider*			m_ThresSlider;
+	Fl_Slider*			m_CurveSlider;
+	Fl_Slider*			m_BlurSlider;
+	Fl_Slider*			m_GridSizeSlider;
+	Fl_Slider*			m_MinStrokeSlider;
+	Fl_Slider*			m_MaxStrokeSlider;
+	Fl_Slider*			m_Alpha2Slider;
+	Fl_Slider*			m_LayersSlider;
+	Fl_Slider*			m_R0LevelSlider;
+	Fl_Slider*			m_JrSlider;
+	Fl_Slider*			m_JgSlider;
+	Fl_Slider*			m_JbSlider;
+	Fl_Slider*			m_JhSlider;
+	Fl_Slider*			m_JsSlider;
+	Fl_Slider*			m_JvSlider;
+
 
 	// Member functions
 	void				setDocument(ImpressionistDoc* doc);
@@ -101,6 +128,8 @@ private:
 	static Fl_Menu_Item		brushTypeMenu[NUM_BRUSH_TYPE+1];
 	static Fl_Menu_Item		colorSpaceMenu[];
 	static Fl_Menu_Item		strokeDirMenu[];
+	static Fl_Menu_Item		styleMenu[];
+	static Fl_Menu_Item		strokeMenu[];
 
 
 	static ImpressionistUI*	whoami(Fl_Menu_* o);
@@ -123,14 +152,18 @@ private:
 		static void cb_AnotherGradientButton(Fl_Widget* o, void* v);	/////////////
 		static void	cb_spacingSlides(Fl_Widget* o, void* v);			//////////////
 		static void cb_SizeRandButton(Fl_Widget* o, void* v);			/////////////
-		static void cb_PaintButton(Fl_Widget* o, void* v);			/////////////
+		static void cb_PaintButton(Fl_Widget* o, void* v);				/////////////
 		static void cb_edgeThresSlides(Fl_Widget* o, void* v);			/////////////
-		static void cb_DoItButton(Fl_Widget* o, void* v);			/////////////
+		static void cb_DoItButton(Fl_Widget* o, void* v);				/////////////
 
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void	cb_colors(Fl_Menu_* o, void* v);					//////////////
 		static void	cb_colorSpaceChoice(Fl_Widget* o, void* v);		//////////////
 	static void cb_paintly(Fl_Menu_* o, void* v);					/////////////
+		static void	cb_styleChoice(Fl_Widget* o, void* v);			//////////////
+		static void	cb_strokeChoice(Fl_Widget* o, void* v);			//////////////
+		static void	cb_RunButton(Fl_Widget* o, void* v);			//////////////
+
 	static void cb_load_edge_image(Fl_Menu_* o, void* v);			//////////////
 	static void cb_load_another_image(Fl_Menu_* o, void* v);		//////////////
 	static void	cb_exit(Fl_Menu_* o, void* v);

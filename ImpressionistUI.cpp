@@ -247,6 +247,22 @@ void ImpressionistUI::cb_paintly(Fl_Menu_* o, void* v){
 
 }
 
+void ImpressionistUI::cb_styleChoice(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_strokeChoice(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_RunButton(Fl_Widget* o, void* v){
+
+}
+
+
+
+
+
 void ImpressionistUI::cb_load_edge_image(Fl_Menu_* o, void* v){
 
 }
@@ -552,6 +568,19 @@ Fl_Menu_Item ImpressionistUI::colorSpaceMenu[] = {
 	{ 0 }
 };
 
+// style menu definition
+Fl_Menu_Item ImpressionistUI::styleMenu[] = {
+	{ "Impressionist", FL_ALT + 'i', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)ONE },
+	{ "Expressionist", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)TWO },
+	{ "Color Wash", FL_ALT + 'w', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)THREE },
+	{ "Pointillist", FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)FOUR },
+	{ "Customize", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)FIVE },
+	{ 0 }
+};
+
+
+
+
 
 
 
@@ -756,6 +785,229 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->align(FL_ALIGN_RIGHT);
 		m_BrushSizeSlider->callback(cb_sizeSlides);	
 
-	m_brushDialog->end();
+	m_colorsDialog->end();
+
+
+	// Paintly dialog definition
+	m_paintlyDialog = new Fl_Window(415, 335, "Paintly Dialog");
+
+		// style choice 
+		m_styleChoice = new Fl_Choice(50, 10, 150, 25, "&Style");
+		m_styleChoice->user_data((void*)(this));	// record self to be used by static callback functions
+		m_styleChoice->menu(styleMenu);
+		m_styleChoice->callback(cb_styleChoice);
+		
+		// Stroke choice 
+		m_strokeChoice = new Fl_Choice(50, 10, 150, 25, "&Stroke");
+		m_strokeChoice->user_data((void*)(this));	// record self to be used by static callback functions
+		m_strokeChoice->menu(strokeMenu);
+		m_strokeChoice->callback(cb_strokeChoice);
+
+		// Run Button
+		m_RunButton = new Fl_Button(240, 10, 150, 25, "&Run");
+		m_RunButton->user_data((void*)(this));
+		m_RunButton->callback(cb_RunButton);
+
+		// Fl Box
+		m_PaintlyBox = new Fl_Box(FL_THIN_UP_BOX, 10, 280, 385, 40, NULL);
+
+
+		// Threshold slider
+		m_ThresSlider = new Fl_Value_Slider(10, 80, 300, 20, "Threshold");
+		m_ThresSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_ThresSlider->type(FL_HOR_NICE_SLIDER);
+		m_ThresSlider->labelfont(FL_COURIER);
+		m_ThresSlider->labelsize(12);
+		m_ThresSlider->minimum(0);
+		m_ThresSlider->maximum(250);
+		m_ThresSlider->step(1);
+		m_ThresSlider->value(m_nSize);
+		m_ThresSlider->align(FL_ALIGN_RIGHT);
+		m_ThresSlider->callback(cb_sizeSlides);
+
+		// Curvature slider
+		m_CurveSlider = new Fl_Value_Slider(10, 80, 300, 20, "Curvature");
+		m_CurveSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_CurveSlider->type(FL_HOR_NICE_SLIDER);
+		m_CurveSlider->labelfont(FL_COURIER);
+		m_CurveSlider->labelsize(12);
+		m_CurveSlider->minimum(0.00);
+		m_CurveSlider->maximum(1.00);
+		m_CurveSlider->step(0.01);
+		m_CurveSlider->value(m_nSize);
+		m_CurveSlider->align(FL_ALIGN_RIGHT);
+		m_CurveSlider->callback(cb_sizeSlides);
+
+		// Blur slider
+		m_BlurSlider = new Fl_Value_Slider(10, 80, 300, 20, "Blur");
+		m_BlurSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_BlurSlider->type(FL_HOR_NICE_SLIDER);
+		m_BlurSlider->labelfont(FL_COURIER);
+		m_BlurSlider->labelsize(12);
+		m_BlurSlider->minimum(0.00);
+		m_BlurSlider->maximum(1.00);
+		m_BlurSlider->step(0.01);
+		m_BlurSlider->value(m_nSize);
+		m_BlurSlider->align(FL_ALIGN_RIGHT);
+		m_BlurSlider->callback(cb_sizeSlides);
+
+		// Grid Size slider
+		m_GridSizeSlider = new Fl_Value_Slider(10, 80, 300, 20, "Grid Size");
+		m_GridSizeSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_GridSizeSlider->type(FL_HOR_NICE_SLIDER);
+		m_GridSizeSlider->labelfont(FL_COURIER);
+		m_GridSizeSlider->labelsize(12);
+		m_GridSizeSlider->minimum(0.00);
+		m_GridSizeSlider->maximum(1.00);
+		m_GridSizeSlider->step(0.01);
+		m_GridSizeSlider->value(m_nSize);
+		m_GridSizeSlider->align(FL_ALIGN_RIGHT);
+		m_GridSizeSlider->callback(cb_sizeSlides);
+
+		// Min Stroke L slider
+		m_MinStrokeSlider = new Fl_Value_Slider(10, 80, 300, 20, "MinStrokeL");
+		m_MinStrokeSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_MinStrokeSlider->type(FL_HOR_NICE_SLIDER);
+		m_MinStrokeSlider->labelfont(FL_COURIER);
+		m_MinStrokeSlider->labelsize(12);
+		m_MinStrokeSlider->minimum(0);
+		m_MinStrokeSlider->maximum(30);
+		m_MinStrokeSlider->step(1);
+		m_MinStrokeSlider->value(m_nSize);
+		m_MinStrokeSlider->align(FL_ALIGN_RIGHT);
+		m_MinStrokeSlider->callback(cb_sizeSlides);
+
+		// Max Stroke L slider
+		m_MaxStrokeSlider = new Fl_Value_Slider(10, 80, 300, 20, "MaxStrokeL");
+		m_MaxStrokeSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_MaxStrokeSlider->type(FL_HOR_NICE_SLIDER);
+		m_MaxStrokeSlider->labelfont(FL_COURIER);
+		m_MaxStrokeSlider->labelsize(12);
+		m_MaxStrokeSlider->minimum(0);
+		m_MaxStrokeSlider->maximum(30);
+		m_MaxStrokeSlider->step(1);
+		m_MaxStrokeSlider->value(m_nSize);
+		m_MaxStrokeSlider->align(FL_ALIGN_RIGHT);
+		m_MaxStrokeSlider->callback(cb_sizeSlides);
+
+		// Alpha slider
+		m_Alpha2Slider = new Fl_Value_Slider(10, 80, 300, 20, "Alpha");
+		m_Alpha2Slider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_Alpha2Slider->type(FL_HOR_NICE_SLIDER);
+		m_Alpha2Slider->labelfont(FL_COURIER);
+		m_Alpha2Slider->labelsize(12);
+		m_Alpha2Slider->minimum(0.00);
+		m_Alpha2Slider->maximum(1.00);
+		m_Alpha2Slider->step(0.01);
+		m_Alpha2Slider->value(m_nSize);
+		m_Alpha2Slider->align(FL_ALIGN_RIGHT);
+		m_Alpha2Slider->callback(cb_sizeSlides);
+
+		// Layers slider
+		m_LayersSlider = new Fl_Value_Slider(10, 80, 300, 20, "Layers");
+		m_LayersSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_LayersSlider->type(FL_HOR_NICE_SLIDER);
+		m_LayersSlider->labelfont(FL_COURIER);
+		m_LayersSlider->labelsize(12);
+		m_LayersSlider->minimum(1);
+		m_LayersSlider->maximum(5);
+		m_LayersSlider->step(1);
+		m_LayersSlider->value(m_nSize);
+		m_LayersSlider->align(FL_ALIGN_RIGHT);
+		m_LayersSlider->callback(cb_sizeSlides);
+
+		// R0 Level slider
+		m_R0LevelSlider = new Fl_Value_Slider(10, 80, 300, 20, "R0 Level");
+		m_R0LevelSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_R0LevelSlider->type(FL_HOR_NICE_SLIDER);
+		m_R0LevelSlider->labelfont(FL_COURIER);
+		m_R0LevelSlider->labelsize(12);
+		m_R0LevelSlider->minimum(0);
+		m_R0LevelSlider->maximum(5);
+		m_R0LevelSlider->step(1);
+		m_R0LevelSlider->value(m_nSize);
+		m_R0LevelSlider->align(FL_ALIGN_RIGHT);
+		m_R0LevelSlider->callback(cb_sizeSlides);
+
+		// Jr slider
+		m_JrSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jr");
+		m_JrSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_JrSlider->type(FL_VERT_NICE_SLIDER);
+		m_JrSlider->labelfont(FL_COURIER);
+		m_JrSlider->labelsize(12);
+		m_JrSlider->minimum(0.00);
+		m_JrSlider->maximum(1.00);
+		m_JrSlider->step(0.01);
+		m_JrSlider->value(m_nSize);
+		m_JrSlider->align(FL_ALIGN_BOTTOM);
+		m_JrSlider->callback(cb_sizeSlides);
+
+		// Jg slider
+		m_JgSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jg");
+		m_JgSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_JgSlider->type(FL_VERT_NICE_SLIDER);
+		m_JgSlider->labelfont(FL_COURIER);
+		m_JgSlider->labelsize(12);
+		m_JgSlider->minimum(0.00);
+		m_JgSlider->maximum(1.00);
+		m_JgSlider->step(0.01);
+		m_JgSlider->value(m_nSize);
+		m_JgSlider->align(FL_ALIGN_BOTTOM);
+		m_JgSlider->callback(cb_sizeSlides);
+
+		// Jb slider
+		m_JbSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jb");
+		m_JbSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_JbSlider->type(FL_VERT_NICE_SLIDER);
+		m_JbSlider->labelfont(FL_COURIER);
+		m_JbSlider->labelsize(12);
+		m_JbSlider->minimum(0.00);
+		m_JbSlider->maximum(1.00);
+		m_JbSlider->step(0.01);
+		m_JbSlider->value(m_nSize);
+		m_JbSlider->align(FL_ALIGN_BOTTOM);
+		m_JbSlider->callback(cb_sizeSlides);
+
+		// Jh slider
+		m_JhSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jh");
+		m_JhSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_JhSlider->type(FL_VERT_NICE_SLIDER);
+		m_JhSlider->labelfont(FL_COURIER);
+		m_JhSlider->labelsize(12);
+		m_JhSlider->minimum(0.00);
+		m_JhSlider->maximum(1.00);
+		m_JhSlider->step(0.01);
+		m_JhSlider->value(m_nSize);
+		m_JhSlider->align(FL_ALIGN_BOTTOM);
+		m_JhSlider->callback(cb_sizeSlides);
+
+		// Js slider
+		m_JsSlider = new Fl_Value_Slider(10, 80, 300, 20, "Js");
+		m_JsSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_JsSlider->type(FL_VERT_NICE_SLIDER);
+		m_JsSlider->labelfont(FL_COURIER);
+		m_JsSlider->labelsize(12);
+		m_JsSlider->minimum(0.00);
+		m_JsSlider->maximum(1.00);
+		m_JsSlider->step(0.01);
+		m_JsSlider->value(m_nSize);
+		m_JsSlider->align(FL_ALIGN_BOTTOM);
+		m_JsSlider->callback(cb_sizeSlides);
+
+		// Jv slider
+		m_JvSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jv");
+		m_JvSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_JvSlider->type(FL_VERT_NICE_SLIDER);
+		m_JvSlider->labelfont(FL_COURIER);
+		m_JvSlider->labelsize(12);
+		m_JvSlider->minimum(0.00);
+		m_JvSlider->maximum(1.00);
+		m_JvSlider->step(0.01);
+		m_JvSlider->value(m_nSize);
+		m_JvSlider->align(FL_ALIGN_BOTTOM);
+		m_JvSlider->callback(cb_sizeSlides);
+
+	m_paintlyDialog->end();
+
 
 }
