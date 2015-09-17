@@ -155,27 +155,40 @@ private:
 		static void cb_PaintButton(Fl_Widget* o, void* v);				/////////////
 		static void cb_edgeThresSlides(Fl_Widget* o, void* v);			/////////////
 		static void cb_DoItButton(Fl_Widget* o, void* v);				/////////////
-
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
-	static void	cb_colors(Fl_Menu_* o, void* v);					//////////////
-		static void	cb_colorSpaceChoice(Fl_Widget* o, void* v);		//////////////
-	static void cb_paintly(Fl_Menu_* o, void* v);					/////////////
-		static void	cb_styleChoice(Fl_Widget* o, void* v);			//////////////
-		static void	cb_strokeChoice(Fl_Widget* o, void* v);			//////////////
-		static void	cb_RunButton(Fl_Widget* o, void* v);			//////////////
-
-	static void cb_load_edge_image(Fl_Menu_* o, void* v);			//////////////
-	static void cb_load_another_image(Fl_Menu_* o, void* v);		//////////////
+	static void	cb_colors(Fl_Menu_* o, void* v);						//////////////
+		static void	cb_colorSpaceChoice(Fl_Widget* o, void* v);			//////////////
+	static void cb_paintly(Fl_Menu_* o, void* v);						/////////////
+		static void	cb_styleChoice(Fl_Widget* o, void* v);				//////////////
+		static void	cb_strokeChoice(Fl_Widget* o, void* v);				//////////////
+		static void	cb_RunButton(Fl_Widget* o, void* v);				//////////////
+		static void	cb_thresSlides(Fl_Widget* o, void* v);				//////////////
+		static void	cb_curveSlides(Fl_Widget* o, void* v);				//////////////
+		static void	cb_blurSlides(Fl_Widget* o, void* v);				//////////////
+		static void	cb_gridSizeSlides(Fl_Widget* o, void* v);			//////////////
+		static void	cb_minStrokeSlides(Fl_Widget* o, void* v);			//////////////
+		static void	cb_maxStrokeSlides(Fl_Widget* o, void* v);			//////////////
+		static void	cb_alpha2Slides(Fl_Widget* o, void* v);				//////////////
+		static void	cb_layersSlides(Fl_Widget* o, void* v);				//////////////
+		static void	cb_r0LevelSlides(Fl_Widget* o, void* v);			//////////////
+		static void	cb_jrSlides(Fl_Widget* o, void* v);					//////////////
+		static void	cb_jgSlides(Fl_Widget* o, void* v);					//////////////
+		static void	cb_jbSlides(Fl_Widget* o, void* v);					//////////////
+		static void	cb_jhSlides(Fl_Widget* o, void* v);					//////////////
+		static void	cb_jsSlides(Fl_Widget* o, void* v);					//////////////
+		static void	cb_jvSlides(Fl_Widget* o, void* v);					//////////////
+	static void cb_load_edge_image(Fl_Menu_* o, void* v);				//////////////
+	static void cb_load_another_image(Fl_Menu_* o, void* v);			//////////////
 	static void	cb_exit(Fl_Menu_* o, void* v);
 
 	// Display menu
-	static void	cb_originalImage(Fl_Menu_* o, void* v);				//////////////
-	static void	cb_edge_image(Fl_Menu_* o, void* v);				//////////////
-	static void	cb_another_image(Fl_Menu_* o, void* v);				//////////////
+	static void	cb_originalImage(Fl_Menu_* o, void* v);					//////////////
+	static void	cb_edge_image(Fl_Menu_* o, void* v);					//////////////
+	static void	cb_another_image(Fl_Menu_* o, void* v);					//////////////
 	
 	// Options menu
-	static void	cb_faster(Fl_Menu_* o, void* v);					//////////////
-	static void	cb_safer(Fl_Menu_* o, void* v);						//////////////
+	static void	cb_faster(Fl_Menu_* o, void* v);						//////////////
+	static void	cb_safer(Fl_Menu_* o, void* v);							//////////////
 
 	// About menu
 	static void	cb_about(Fl_Menu_* o, void* v);

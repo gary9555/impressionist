@@ -244,7 +244,8 @@ void ImpressionistUI::cb_colors(Fl_Menu_* o, void* v)
 
 
 void ImpressionistUI::cb_paintly(Fl_Menu_* o, void* v){
-
+	
+	whoami(o)->m_paintlyDialog->show();
 }
 
 void ImpressionistUI::cb_styleChoice(Fl_Widget* o, void* v){
@@ -258,7 +259,65 @@ void ImpressionistUI::cb_strokeChoice(Fl_Widget* o, void* v){
 void ImpressionistUI::cb_RunButton(Fl_Widget* o, void* v){
 
 }
+void	ImpressionistUI::cb_thresSlides(Fl_Widget* o, void* v){
 
+}
+
+void	ImpressionistUI::cb_curveSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_blurSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_gridSizeSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_minStrokeSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_maxStrokeSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_alpha2Slides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_layersSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_r0LevelSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_jrSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_jgSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_jbSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_jhSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_jsSlides(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_jvSlides(Fl_Widget* o, void* v){
+
+}
 
 
 
@@ -578,6 +637,16 @@ Fl_Menu_Item ImpressionistUI::styleMenu[] = {
 	{ 0 }
 };
 
+// stroke menu definition
+Fl_Menu_Item ImpressionistUI::strokeMenu[] = {
+	{ "Curve Brush", FL_ALT + 'r', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)ONE },
+	{ "BSpline Brush", FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)TWO },
+	{ "Circle Brush", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)THREE },
+	{ "Clip Line Brush", FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)FOUR },
+	{ "Line Brush", FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_strokeChoice, (void *)FIVE },
+	{ 0 }
+};
+
 
 
 
@@ -789,27 +858,27 @@ ImpressionistUI::ImpressionistUI() {
 
 
 	// Paintly dialog definition
-	m_paintlyDialog = new Fl_Window(415, 335, "Paintly Dialog");
+	m_paintlyDialog = new Fl_Window(415, 280, "Paintly Dialog");
 
 		// style choice 
-		m_styleChoice = new Fl_Choice(50, 10, 150, 25, "&Style");
+		m_styleChoice = new Fl_Choice(50, 10, 130, 25, "&Style");
 		m_styleChoice->user_data((void*)(this));	// record self to be used by static callback functions
 		m_styleChoice->menu(styleMenu);
 		m_styleChoice->callback(cb_styleChoice);
 		
 		// Stroke choice 
-		m_strokeChoice = new Fl_Choice(50, 10, 150, 25, "&Stroke");
+		m_strokeChoice = new Fl_Choice(230, 10, 120, 25, "&Stroke");
 		m_strokeChoice->user_data((void*)(this));	// record self to be used by static callback functions
 		m_strokeChoice->menu(strokeMenu);
 		m_strokeChoice->callback(cb_strokeChoice);
 
 		// Run Button
-		m_RunButton = new Fl_Button(240, 10, 150, 25, "&Run");
+		m_RunButton = new Fl_Button(360, 10, 40, 25, "&Run");
 		m_RunButton->user_data((void*)(this));
 		m_RunButton->callback(cb_RunButton);
 
 		// Fl Box
-		m_PaintlyBox = new Fl_Box(FL_THIN_UP_BOX, 10, 280, 385, 40, NULL);
+		m_PaintlyBox = new Fl_Box(FL_THIN_UP_BOX, 5, 40, 395, 225, NULL);
 
 
 		// Threshold slider
@@ -823,7 +892,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_ThresSlider->step(1);
 		m_ThresSlider->value(m_nSize);
 		m_ThresSlider->align(FL_ALIGN_RIGHT);
-		m_ThresSlider->callback(cb_sizeSlides);
+		m_ThresSlider->callback(cb_thresSlides);
 
 		// Curvature slider
 		m_CurveSlider = new Fl_Value_Slider(10, 80, 300, 20, "Curvature");
@@ -836,7 +905,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_CurveSlider->step(0.01);
 		m_CurveSlider->value(m_nSize);
 		m_CurveSlider->align(FL_ALIGN_RIGHT);
-		m_CurveSlider->callback(cb_sizeSlides);
+		m_CurveSlider->callback(cb_curveSlides);
 
 		// Blur slider
 		m_BlurSlider = new Fl_Value_Slider(10, 80, 300, 20, "Blur");
@@ -849,7 +918,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BlurSlider->step(0.01);
 		m_BlurSlider->value(m_nSize);
 		m_BlurSlider->align(FL_ALIGN_RIGHT);
-		m_BlurSlider->callback(cb_sizeSlides);
+		m_BlurSlider->callback(cb_blurSlides);
 
 		// Grid Size slider
 		m_GridSizeSlider = new Fl_Value_Slider(10, 80, 300, 20, "Grid Size");
@@ -862,7 +931,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_GridSizeSlider->step(0.01);
 		m_GridSizeSlider->value(m_nSize);
 		m_GridSizeSlider->align(FL_ALIGN_RIGHT);
-		m_GridSizeSlider->callback(cb_sizeSlides);
+		m_GridSizeSlider->callback(cb_gridSizeSlides);
 
 		// Min Stroke L slider
 		m_MinStrokeSlider = new Fl_Value_Slider(10, 80, 300, 20, "MinStrokeL");
@@ -875,7 +944,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_MinStrokeSlider->step(1);
 		m_MinStrokeSlider->value(m_nSize);
 		m_MinStrokeSlider->align(FL_ALIGN_RIGHT);
-		m_MinStrokeSlider->callback(cb_sizeSlides);
+		m_MinStrokeSlider->callback(cb_minStrokeSlides);
 
 		// Max Stroke L slider
 		m_MaxStrokeSlider = new Fl_Value_Slider(10, 80, 300, 20, "MaxStrokeL");
@@ -888,7 +957,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_MaxStrokeSlider->step(1);
 		m_MaxStrokeSlider->value(m_nSize);
 		m_MaxStrokeSlider->align(FL_ALIGN_RIGHT);
-		m_MaxStrokeSlider->callback(cb_sizeSlides);
+		m_MaxStrokeSlider->callback(cb_maxStrokeSlides);
 
 		// Alpha slider
 		m_Alpha2Slider = new Fl_Value_Slider(10, 80, 300, 20, "Alpha");
@@ -901,7 +970,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_Alpha2Slider->step(0.01);
 		m_Alpha2Slider->value(m_nSize);
 		m_Alpha2Slider->align(FL_ALIGN_RIGHT);
-		m_Alpha2Slider->callback(cb_sizeSlides);
+		m_Alpha2Slider->callback(cb_alpha2Slides);
 
 		// Layers slider
 		m_LayersSlider = new Fl_Value_Slider(10, 80, 300, 20, "Layers");
@@ -914,7 +983,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_LayersSlider->step(1);
 		m_LayersSlider->value(m_nSize);
 		m_LayersSlider->align(FL_ALIGN_RIGHT);
-		m_LayersSlider->callback(cb_sizeSlides);
+		m_LayersSlider->callback(cb_layersSlides);
 
 		// R0 Level slider
 		m_R0LevelSlider = new Fl_Value_Slider(10, 80, 300, 20, "R0 Level");
@@ -927,10 +996,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_R0LevelSlider->step(1);
 		m_R0LevelSlider->value(m_nSize);
 		m_R0LevelSlider->align(FL_ALIGN_RIGHT);
-		m_R0LevelSlider->callback(cb_sizeSlides);
+		m_R0LevelSlider->callback(cb_r0LevelSlides);
 
 		// Jr slider
-		m_JrSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jr");
+		m_JrSlider = new Fl_Value_Slider(10, 80, 20, 20, "Jr");
 		m_JrSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_JrSlider->type(FL_VERT_NICE_SLIDER);
 		m_JrSlider->labelfont(FL_COURIER);
@@ -940,10 +1009,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_JrSlider->step(0.01);
 		m_JrSlider->value(m_nSize);
 		m_JrSlider->align(FL_ALIGN_BOTTOM);
-		m_JrSlider->callback(cb_sizeSlides);
+		m_JrSlider->callback(cb_jrSlides);
 
 		// Jg slider
-		m_JgSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jg");
+		m_JgSlider = new Fl_Value_Slider(10, 80, 20, 20, "Jg");
 		m_JgSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_JgSlider->type(FL_VERT_NICE_SLIDER);
 		m_JgSlider->labelfont(FL_COURIER);
@@ -953,10 +1022,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_JgSlider->step(0.01);
 		m_JgSlider->value(m_nSize);
 		m_JgSlider->align(FL_ALIGN_BOTTOM);
-		m_JgSlider->callback(cb_sizeSlides);
+		m_JgSlider->callback(cb_jgSlides);
 
 		// Jb slider
-		m_JbSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jb");
+		m_JbSlider = new Fl_Value_Slider(10, 80, 20, 80, "Jb");
 		m_JbSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_JbSlider->type(FL_VERT_NICE_SLIDER);
 		m_JbSlider->labelfont(FL_COURIER);
@@ -966,10 +1035,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_JbSlider->step(0.01);
 		m_JbSlider->value(m_nSize);
 		m_JbSlider->align(FL_ALIGN_BOTTOM);
-		m_JbSlider->callback(cb_sizeSlides);
+		m_JbSlider->callback(cb_jbSlides);
 
 		// Jh slider
-		m_JhSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jh");
+		m_JhSlider = new Fl_Value_Slider(10, 80, 20, 20, "Jh");
 		m_JhSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_JhSlider->type(FL_VERT_NICE_SLIDER);
 		m_JhSlider->labelfont(FL_COURIER);
@@ -979,10 +1048,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_JhSlider->step(0.01);
 		m_JhSlider->value(m_nSize);
 		m_JhSlider->align(FL_ALIGN_BOTTOM);
-		m_JhSlider->callback(cb_sizeSlides);
+		m_JhSlider->callback(cb_jhSlides);
 
 		// Js slider
-		m_JsSlider = new Fl_Value_Slider(10, 80, 300, 20, "Js");
+		m_JsSlider = new Fl_Value_Slider(10, 80, 20, 20, "Js");
 		m_JsSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_JsSlider->type(FL_VERT_NICE_SLIDER);
 		m_JsSlider->labelfont(FL_COURIER);
@@ -992,10 +1061,10 @@ ImpressionistUI::ImpressionistUI() {
 		m_JsSlider->step(0.01);
 		m_JsSlider->value(m_nSize);
 		m_JsSlider->align(FL_ALIGN_BOTTOM);
-		m_JsSlider->callback(cb_sizeSlides);
+		m_JsSlider->callback(cb_jsSlides);
 
 		// Jv slider
-		m_JvSlider = new Fl_Value_Slider(10, 80, 300, 20, "Jv");
+		m_JvSlider = new Fl_Value_Slider(10, 80, 20, 20, "Jv");
 		m_JvSlider->user_data((void*)(this));	// record self to be used by static callback functions
 		m_JvSlider->type(FL_VERT_NICE_SLIDER);
 		m_JvSlider->labelfont(FL_COURIER);
@@ -1005,7 +1074,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_JvSlider->step(0.01);
 		m_JvSlider->value(m_nSize);
 		m_JvSlider->align(FL_ALIGN_BOTTOM);
-		m_JvSlider->callback(cb_sizeSlides);
+		m_JvSlider->callback(cb_jvSlides);
 
 	m_paintlyDialog->end();
 
