@@ -16,6 +16,10 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Box.H>
+#include <FL/Fl_Input.H>
+#include <FL/Fl_Float_Input.H>
+#include <FL/Fl_Color_Chooser.H>
+
 
 #include "Impressionist.h"
 #include "OriginalView.h"
@@ -72,6 +76,8 @@ public:
 	// Colors dialog
 	Fl_Window*			m_colorsDialog;
 	Fl_Choice*			m_colorSpaceChoice;
+	Fl_Color_Chooser*	m_colorChooser;
+
 
 	
 	// Paintly Dialog
@@ -123,6 +129,11 @@ private:
 
 	bool	m_bEdgeClipping;
 
+	double	m_rInputValue;
+	double	m_gInputValue;
+	double	m_bInputValue;
+
+
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
 	static Fl_Menu_Item		brushTypeMenu[NUM_BRUSH_TYPE+1];
@@ -158,6 +169,10 @@ private:
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void	cb_colors(Fl_Menu_* o, void* v);						//////////////
 		static void	cb_colorSpaceChoice(Fl_Widget* o, void* v);			//////////////
+		static void	cb_rInput(Fl_Widget* o, void* v);					//////////////
+		static void	cb_gInput(Fl_Widget* o, void* v);					//////////////
+		static void	cb_bInput(Fl_Widget* o, void* v);					//////////////
+
 	static void cb_paintly(Fl_Menu_* o, void* v);						/////////////
 		static void	cb_styleChoice(Fl_Widget* o, void* v);				//////////////
 		static void	cb_strokeChoice(Fl_Widget* o, void* v);				//////////////
