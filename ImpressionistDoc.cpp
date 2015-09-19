@@ -69,17 +69,15 @@ char* ImpressionistDoc::getImageName()
 }
 
 
+
 //---------------------------------------------------------
-// Called by the UI when the user changes the color space
-// type: one of the defined color spaces.
+// Called by the UI when the user changes the painting style.
+// style: one of the defined painting styles.
 //---------------------------------------------------------
-void ImpressionistDoc::setColorSpace(int type)
+void ImpressionistDoc::setPaintStyle(int style)
 {
-	//m_pCurrentBrush = ImpBrush::c_pBrushes[type];
+	
 }
-
-
-
 
 
 

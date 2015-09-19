@@ -53,3 +53,8 @@ void PointBrush::BrushEnd( const Point source, const Point target )
 	// do nothing so far
 }
 
+char* PointBrush::BrushName(void){
+	
+	return ImpBrush::BrushName();
+}
+

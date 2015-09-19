@@ -26,7 +26,7 @@ public:
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
 	void	setBrushType(int type);			// called by the UI to set the brushType
 
-	void	setColorSpace(int type);		// called by the UI to set the color space
+	void	setPaintStyle(int style);		// called by the UI to set the painting style		//////////////////////
 
 	int		getSize();						// get the UI size
 	void	setSize(int size);				// set the UI size

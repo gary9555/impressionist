@@ -37,6 +37,15 @@ enum{
 
 };
 
+enum{
+	IMPRESSIONIST = 0,
+	EXPRESSIONIST,
+	COLOR_WASH,
+	POINTILLIST,
+	CUSTOMIZE,
+	NUM_STYLE
+};
+
 
 class ImpressionistUI {
 public:
@@ -120,6 +129,7 @@ private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document
 
 	// All attributes here
+	//brushes
 	int		m_nSize;
 	int		m_nLineWidth;
 	int		m_nLineAngle;
@@ -128,16 +138,38 @@ private:
 	int		m_nEdgeThres;
 
 	bool	m_bEdgeClipping;
-
+	bool	m_bAnotherGrad;
+	bool	m_bSizeRand;
+	
+	//color
 	double	m_rInputValue;
 	double	m_gInputValue;
 	double	m_bInputValue;
+
+	//paintly
+	int		m_nThres;
+	double	m_nCurve;
+	double	m_nBlur;
+	double	m_nGridSize;
+	int		m_nMinStroke;
+	int		m_nMaxStroke;
+	double	m_nAlpha2;
+	int		m_nLayers;
+	int		m_nR0Level;
+	double	m_nJr;
+	double	m_nJg;
+	double	m_nJb;
+	double	m_nJh;
+	double	m_nJs;
+	double	m_nJv;
+
+
 
 
 	// Static class members
 	static Fl_Menu_Item		menuitems[];
 	static Fl_Menu_Item		brushTypeMenu[NUM_BRUSH_TYPE+1];
-	static Fl_Menu_Item		colorSpaceMenu[];
+	//static Fl_Menu_Item		colorSpaceMenu[];
 	static Fl_Menu_Item		strokeDirMenu[];
 	static Fl_Menu_Item		styleMenu[];
 	static Fl_Menu_Item		strokeMenu[];

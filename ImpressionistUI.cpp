@@ -243,81 +243,7 @@ void ImpressionistUI::cb_colors(Fl_Menu_* o, void* v)
 
 
 
-void ImpressionistUI::cb_paintly(Fl_Menu_* o, void* v){
-	
-	whoami(o)->m_paintlyDialog->show();
-}
 
-void ImpressionistUI::cb_styleChoice(Fl_Widget* o, void* v){
-
-}
-
-void ImpressionistUI::cb_strokeChoice(Fl_Widget* o, void* v){
-
-}
-
-void ImpressionistUI::cb_RunButton(Fl_Widget* o, void* v){
-
-}
-void	ImpressionistUI::cb_thresSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_curveSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_blurSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_gridSizeSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_minStrokeSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_maxStrokeSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_alpha2Slides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_layersSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_r0LevelSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_jrSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_jgSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_jbSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_jhSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_jsSlides(Fl_Widget* o, void* v){
-
-}
-
-void	ImpressionistUI::cb_jvSlides(Fl_Widget* o, void* v){
-
-}
 
 
 
@@ -358,59 +284,6 @@ void ImpressionistUI::cb_colorSpaceChoice(Fl_Widget* o, void* v){
 	
 }
 
-void ImpressionistUI::cb_EdgeClippingButton(Fl_Widget* o, void* v)
-{
-	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
-
-	if (pUI->m_bEdgeClipping == TRUE) pUI->m_bEdgeClipping = FALSE;
-	else pUI->m_bEdgeClipping = TRUE;
-}
-
-void ImpressionistUI::cb_AnotherGradientButton(Fl_Widget* o, void* v){
-
-}
-
-void ImpressionistUI::cb_spacingSlides(Fl_Widget* o, void* v){
-
-}
-
-void ImpressionistUI::cb_SizeRandButton(Fl_Widget* o, void* v){
-
-}
-
-void ImpressionistUI::cb_PaintButton(Fl_Widget* o, void* v){
-
-}
-
-void ImpressionistUI::cb_edgeThresSlides(Fl_Widget* o, void* v){
-
-}
-
-void ImpressionistUI::cb_DoItButton(Fl_Widget* o, void* v){
-
-}
-
-// RGB input value boxes---------------------------
-//-------------------------------------------------
-void ImpressionistUI::cb_rInput(Fl_Widget* o, void* v)
-{
-	((ImpressionistUI*)(o->user_data()))->m_rInputValue = int(((Fl_Float_Input *)o)->value());
-}
-
-void ImpressionistUI::cb_gInput(Fl_Widget* o, void* v)
-{
-	((ImpressionistUI*)(o->user_data()))->m_gInputValue = int(((Fl_Float_Input *)o)->value());
-}
-
-void ImpressionistUI::cb_bInput(Fl_Widget* o, void* v)
-{
-	((ImpressionistUI*)(o->user_data()))->m_bInputValue = int(((Fl_Float_Input *)o)->value());
-}
-			
-					
-
-
-
 
 
 
@@ -424,19 +297,19 @@ void ImpressionistUI::cb_exit(Fl_Menu_* o, void* v)
 {
 	whoami(o)->m_mainWindow->hide();
 	whoami(o)->m_brushDialog->hide();
-
 }
 
 
 
-//-----------------------------------------------------------
-// Brings up an about dialog box
-// Called by the UI when the about menu item is chosen
-//-----------------------------------------------------------
-void ImpressionistUI::cb_about(Fl_Menu_* o, void* v) 
-{
-	fl_message("Impressionist for COMP4411, Fall 2015\n Authored by Gary Wen");
-}
+
+
+
+
+
+
+// Brushes Dialog 
+//----------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 
 //------- UI should keep track of the current for all the controls for answering the query from Doc ---------
 //-------------------------------------------------------------
@@ -451,19 +324,32 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 
 	int type=(int)v;
 
+	switch (type){
+	case BRUSH_POINTS:		
+	case BRUSH_CIRCLES:
+	case BRUSH_SCATTERED_POINTS:
+	case BRUSH_SCATTERED_CIRCLES:
+		pUI->m_StrokeDirChoice->deactivate();
+		pUI->m_LineWidthSlider->deactivate();
+		pUI->m_LineAngleSlider->deactivate();
+		pUI->m_EdgeClippingButton->deactivate();
+		pUI->m_AnotherGradientButton->deactivate();
+		break;
+	case BRUSH_LINES:
+	case BRUSH_SCATTERED_LINES:
+		pUI->m_StrokeDirChoice->activate();
+		pUI->m_LineWidthSlider->activate();
+		pUI->m_LineAngleSlider->activate();
+		pUI->m_EdgeClippingButton->activate();
+		pUI->m_AnotherGradientButton->activate();
+		break;
+	default:
+		break;
 
-	pDoc->setBrushType(type);
+	}
+
+	pDoc->setPaintStyle(type);
 }
-
-
-
-
-
-
-
-
-
-
 
 //------------------------------------------------------------
 // Clears the paintview canvas.
@@ -506,15 +392,345 @@ void ImpressionistUI::cb_lineAngleSlides(Fl_Widget* o, void* v)
 
 void ImpressionistUI::cb_alphaSlides(Fl_Widget* o, void* v)
 {
-	((ImpressionistUI*)(o->user_data()))->m_nAlpha = int(((Fl_Slider *)o)->value());
+	((ImpressionistUI*)(o->user_data()))->m_nAlpha = double(((Fl_Slider *)o)->value());
 }
 
+void ImpressionistUI::cb_EdgeClippingButton(Fl_Widget* o, void* v)
+{
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+
+	if (pUI->m_bEdgeClipping == TRUE) pUI->m_bEdgeClipping = FALSE;
+	else pUI->m_bEdgeClipping = TRUE;
+}
+
+void ImpressionistUI::cb_AnotherGradientButton(Fl_Widget* o, void* v){
+	
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+
+	if (pUI->m_bAnotherGrad == TRUE) pUI->m_bAnotherGrad = FALSE;
+	else pUI->m_bAnotherGrad = TRUE;
+}
+
+void ImpressionistUI::cb_spacingSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nSpacing = int(((Fl_Slider *)o)->value());
+
+}
+
+void ImpressionistUI::cb_SizeRandButton(Fl_Widget* o, void* v){
+
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+
+	if (pUI->m_bSizeRand == TRUE) pUI->m_bSizeRand = FALSE;
+	else pUI->m_bSizeRand = TRUE;
+}
+
+void ImpressionistUI::cb_PaintButton(Fl_Widget* o, void* v){
+
+
+}
+
+void ImpressionistUI::cb_edgeThresSlides(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_DoItButton(Fl_Widget* o, void* v){
+
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 
 
 
 
 
+// Paintly dialog
+//----------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
 
+void ImpressionistUI::cb_paintly(Fl_Menu_* o, void* v){
+	
+	whoami(o)->m_paintlyDialog->show();
+}
+
+void ImpressionistUI::cb_styleChoice(Fl_Widget* o, void* v){
+
+	ImpressionistUI* pUI = ((ImpressionistUI *)(o->user_data()));
+	ImpressionistDoc* pDoc = pUI->getDocument();
+
+	int style = (int)v;
+
+	switch (style){
+	case IMPRESSIONIST:
+		pUI->m_ThresSlider->value(100);
+		pUI->m_CurveSlider->value(1.00);
+		pUI->m_BlurSlider->value(0.50);
+		pUI->m_GridSizeSlider->value(1.00);
+		pUI->m_MinStrokeSlider->value(4);
+		pUI->m_MaxStrokeSlider->value(16);
+		pUI->m_Alpha2Slider->value(1.00);
+		pUI->m_LayersSlider->value(3);
+		pUI->m_R0LevelSlider->value(3);
+		pUI->m_JrSlider->value(0.00);
+		pUI->m_JgSlider->value(0.00);
+		pUI->m_JbSlider->value(0.00);
+		pUI->m_JhSlider->value(0.00);
+		pUI->m_JsSlider->value(0.00);
+		pUI->m_JvSlider->value(0.00);
+
+		pUI->m_ThresSlider->deactivate();
+		pUI->m_CurveSlider->deactivate();
+		pUI->m_BlurSlider->deactivate();
+		pUI->m_GridSizeSlider->deactivate();
+		pUI->m_MinStrokeSlider->deactivate();
+		pUI->m_MaxStrokeSlider->deactivate();
+		pUI->m_Alpha2Slider->deactivate();
+		pUI->m_LayersSlider->deactivate();
+		pUI->m_R0LevelSlider->deactivate();
+		pUI->m_JrSlider->deactivate();
+		pUI->m_JgSlider->deactivate();
+		pUI->m_JbSlider->deactivate();
+		pUI->m_JhSlider->deactivate();
+		pUI->m_JsSlider->deactivate();
+		pUI->m_JvSlider->deactivate();
+		break;
+	case EXPRESSIONIST:
+		pUI->m_ThresSlider->value(50);
+		pUI->m_CurveSlider->value(0.25);
+		pUI->m_BlurSlider->value(0.50);
+		pUI->m_GridSizeSlider->value(1.00);
+		pUI->m_MinStrokeSlider->value(10);
+		pUI->m_MaxStrokeSlider->value(16);
+		pUI->m_Alpha2Slider->value(0.70);
+		pUI->m_LayersSlider->value(3);
+		pUI->m_R0LevelSlider->value(3);
+		pUI->m_JrSlider->value(0.00);
+		pUI->m_JgSlider->value(0.00);
+		pUI->m_JbSlider->value(0.00);
+		pUI->m_JhSlider->value(0.00);
+		pUI->m_JsSlider->value(0.00);
+		pUI->m_JvSlider->value(0.50);
+
+		pUI->m_ThresSlider->deactivate();
+		pUI->m_CurveSlider->deactivate();
+		pUI->m_BlurSlider->deactivate();
+		pUI->m_GridSizeSlider->deactivate();
+		pUI->m_MinStrokeSlider->deactivate();
+		pUI->m_MaxStrokeSlider->deactivate();
+		pUI->m_Alpha2Slider->deactivate();
+		pUI->m_LayersSlider->deactivate();
+		pUI->m_R0LevelSlider->deactivate();
+		pUI->m_JrSlider->deactivate();
+		pUI->m_JgSlider->deactivate();
+		pUI->m_JbSlider->deactivate();
+		pUI->m_JhSlider->deactivate();
+		pUI->m_JsSlider->deactivate();
+		pUI->m_JvSlider->deactivate();
+		break;
+	case COLOR_WASH:
+		pUI->m_ThresSlider->value(200);
+		pUI->m_CurveSlider->value(1.00);
+		pUI->m_BlurSlider->value(0.50);
+		pUI->m_GridSizeSlider->value(1.00);
+		pUI->m_MinStrokeSlider->value(4);
+		pUI->m_MaxStrokeSlider->value(16);
+		pUI->m_Alpha2Slider->value(0.50);
+		pUI->m_LayersSlider->value(3);
+		pUI->m_R0LevelSlider->value(3);
+		pUI->m_JrSlider->value(0.30);
+		pUI->m_JgSlider->value(0.30);
+		pUI->m_JbSlider->value(0.30);
+		pUI->m_JhSlider->value(0.00);
+		pUI->m_JsSlider->value(0.00);
+		pUI->m_JvSlider->value(0.00);
+
+		pUI->m_ThresSlider->deactivate();
+		pUI->m_CurveSlider->deactivate();
+		pUI->m_BlurSlider->deactivate();
+		pUI->m_GridSizeSlider->deactivate();
+		pUI->m_MinStrokeSlider->deactivate();
+		pUI->m_MaxStrokeSlider->deactivate();
+		pUI->m_Alpha2Slider->deactivate();
+		pUI->m_LayersSlider->deactivate();
+		pUI->m_R0LevelSlider->deactivate();
+		pUI->m_JrSlider->deactivate();
+		pUI->m_JgSlider->deactivate();
+		pUI->m_JbSlider->deactivate();
+		pUI->m_JhSlider->deactivate();
+		pUI->m_JsSlider->deactivate();
+		pUI->m_JvSlider->deactivate();
+		break;
+	case POINTILLIST:
+		pUI->m_ThresSlider->value(100);
+		pUI->m_CurveSlider->value(1.00);
+		pUI->m_BlurSlider->value(0.50);
+		pUI->m_GridSizeSlider->value(1.00);
+		pUI->m_MinStrokeSlider->value(0);
+		pUI->m_MaxStrokeSlider->value(0);
+		pUI->m_Alpha2Slider->value(1.00);
+		pUI->m_LayersSlider->value(2);
+		pUI->m_R0LevelSlider->value(2);
+		pUI->m_JrSlider->value(0.00);
+		pUI->m_JgSlider->value(0.00);
+		pUI->m_JbSlider->value(0.00);
+		pUI->m_JhSlider->value(0.30);
+		pUI->m_JsSlider->value(0.00);
+		pUI->m_JvSlider->value(1.00);
+
+		pUI->m_ThresSlider->deactivate();
+		pUI->m_CurveSlider->deactivate();
+		pUI->m_BlurSlider->deactivate();
+		pUI->m_GridSizeSlider->deactivate();
+		pUI->m_MinStrokeSlider->deactivate();
+		pUI->m_MaxStrokeSlider->deactivate();
+		pUI->m_Alpha2Slider->deactivate();
+		pUI->m_LayersSlider->deactivate();
+		pUI->m_R0LevelSlider->deactivate();
+		pUI->m_JrSlider->deactivate();
+		pUI->m_JgSlider->deactivate();
+		pUI->m_JbSlider->deactivate();
+		pUI->m_JhSlider->deactivate();
+		pUI->m_JsSlider->deactivate();
+		pUI->m_JvSlider->deactivate();
+		break;
+	case CUSTOMIZE:
+		pUI->m_ThresSlider->activate();
+		pUI->m_CurveSlider->activate();
+		pUI->m_BlurSlider->activate();
+		pUI->m_GridSizeSlider->activate();
+		pUI->m_MinStrokeSlider->activate();
+		pUI->m_MaxStrokeSlider->activate();
+		pUI->m_Alpha2Slider->activate();
+		pUI->m_LayersSlider->activate();
+		pUI->m_R0LevelSlider->activate();
+		pUI->m_JrSlider->activate();
+		pUI->m_JgSlider->activate();
+		pUI->m_JbSlider->activate();
+		pUI->m_JhSlider->activate();
+		pUI->m_JsSlider->activate();
+		pUI->m_JvSlider->activate();
+		break;
+	default:
+		break;
+
+	}
+
+	pDoc->setBrushType(style);
+}
+
+void ImpressionistUI::cb_strokeChoice(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_RunButton(Fl_Widget* o, void* v){
+
+}
+
+void	ImpressionistUI::cb_thresSlides(Fl_Widget* o, void* v){
+	
+	((ImpressionistUI*)(o->user_data()))->m_nThres = int(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_curveSlides(Fl_Widget* o, void* v){
+	
+	((ImpressionistUI*)(o->user_data()))->m_nCurve = double(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_blurSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nBlur = double(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_gridSizeSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nGridSize = double(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_minStrokeSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nMinStroke = int(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_maxStrokeSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nMaxStroke = int(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_alpha2Slides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nAlpha2 = double(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_layersSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nLayers = int(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_r0LevelSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nR0Level = int(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_jrSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nJr = double(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_jgSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nJg = double(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_jbSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nJb = double(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_jhSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nJh = double(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_jsSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nJs = double(((Fl_Slider *)o)->value());
+
+}
+
+void	ImpressionistUI::cb_jvSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nJv = double(((Fl_Slider *)o)->value());
+
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+//-----------------------------------------------------------
+// Brings up an about dialog box
+// Called by the UI when the about menu item is chosen
+//-----------------------------------------------------------
+void ImpressionistUI::cb_about(Fl_Menu_* o, void* v) 
+{
+	fl_message("Impressionist for COMP4411, Fall 2015\n Authored by Gary Wen");
+}
 
 
 
@@ -634,7 +850,7 @@ Fl_Menu_Item ImpressionistUI::strokeDirMenu[] = {
 
 
 
-
+/*
 // Color Space choice menu definition
 Fl_Menu_Item ImpressionistUI::colorSpaceMenu[] = {
 	{ "rgb", NULL, (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)ONE},
@@ -643,14 +859,15 @@ Fl_Menu_Item ImpressionistUI::colorSpaceMenu[] = {
 	{ "hsv", NULL, (Fl_Callback *)ImpressionistUI::cb_colorSpaceChoice, (void *)FOUR },
 	{ 0 }
 };
+*/
 
 // style menu definition
 Fl_Menu_Item ImpressionistUI::styleMenu[] = {
-	{ "Impressionist", FL_ALT + 'i', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)ONE },
-	{ "Expressionist", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)TWO },
-	{ "Color Wash", FL_ALT + 'w', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)THREE },
-	{ "Pointillist", FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)FOUR },
-	{ "Customize", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)FIVE },
+	{ "Impressionist", FL_ALT + 'i', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)IMPRESSIONIST },
+	{ "Expressionist", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)EXPRESSIONIST },
+	{ "Color Wash", FL_ALT + 'w', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)COLOR_WASH },
+	{ "Pointillist", FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)POINTILLIST },
+	{ "Customize", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_styleChoice, (void *)CUSTOMIZE },
 	{ 0 }
 };
 
@@ -700,15 +917,18 @@ ImpressionistUI::ImpressionistUI() {
     m_mainWindow->end();
 
 	// init values
-
+	// Brushes
 	m_nSize = 10;
 	m_nLineWidth = 1;
 	m_nLineAngle = 0;
 	m_nAlpha = 1.00;
 	m_bEdgeClipping = TRUE;
+	m_bAnotherGrad = FALSE;
 	m_nSpacing = 4;
+	m_bSizeRand = TRUE;
 	m_nEdgeThres = 200;
-	m_rInputValue = 1.000;
+	//Paintly
+	 
 
 	// brush dialog definition
 	m_brushDialog = new Fl_Window(415, 335, "Brush Dialog");
@@ -723,6 +943,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_StrokeDirChoice = new Fl_Choice(110, 45, 160, 25, "&Stroke Direction");
 		m_StrokeDirChoice->user_data((void*)(this));	// record self to be used by static callback functions
 		m_StrokeDirChoice->menu(strokeDirMenu);
+		m_StrokeDirChoice->deactivate();
 		m_StrokeDirChoice->callback(cb_strokeDirChoice);
 
 		//clear canvas button
@@ -756,6 +977,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_LineWidthSlider->step(1);
 		m_LineWidthSlider->value(m_nLineWidth);
 		m_LineWidthSlider->align(FL_ALIGN_RIGHT);
+		m_LineWidthSlider->deactivate();
 		m_LineWidthSlider->callback(cb_lineWidthSlides);
 
 
@@ -770,6 +992,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_LineAngleSlider->step(1);
 		m_LineAngleSlider->value(m_nLineAngle);
 		m_LineAngleSlider->align(FL_ALIGN_RIGHT);
+		m_LineAngleSlider->deactivate();
 		m_LineAngleSlider->callback(cb_lineAngleSlides);
 
 
@@ -789,11 +1012,14 @@ ImpressionistUI::ImpressionistUI() {
 		// edge-clipping light button
 		m_EdgeClippingButton = new Fl_Light_Button(10, 200, 140, 25, "&Edge Clipping");
 		m_EdgeClippingButton->user_data((void*)(this));   // record self to be used by static callback functions
+		m_EdgeClippingButton->value(m_bEdgeClipping);
+		m_EdgeClippingButton->deactivate();
 		m_EdgeClippingButton->callback(cb_EdgeClippingButton);
 
 		// another gradient light button
 		m_AnotherGradientButton = new Fl_Light_Button(200, 200, 160, 25, "&Another Gradient");
 		m_AnotherGradientButton->user_data((void*)(this));   // record self to be used by static callback functions
+		m_AnotherGradientButton->deactivate();
 		m_AnotherGradientButton->callback(cb_AnotherGradientButton);
 
 		// Box 1
@@ -813,6 +1039,7 @@ ImpressionistUI::ImpressionistUI() {
 		// Size Rand light button
 		m_SizeRandButton = new Fl_Light_Button(225, 243, 95, 25, "&Size Rand.");
 		m_SizeRandButton->user_data((void*)(this));   // record self to be used by static callback functions
+		m_SizeRandButton->value(m_bSizeRand);
 		m_SizeRandButton->callback(cb_SizeRandButton);
 		// Paint button
 		m_PaintButton = new Fl_Button(330, 243, 45, 25, "&Paint");
@@ -849,7 +1076,7 @@ ImpressionistUI::ImpressionistUI() {
 	m_colorsDialog = new Fl_Window(240, 245, "Colors Selection");
 		// Color chooser
 		m_colorChooser = new Fl_Color_Chooser(10, 20, 210, 200, "Color Blending");
-
+		m_colorChooser->rgb(1.000, 1.000, 1.000);
 	m_colorsDialog->end();
 
 
@@ -877,7 +1104,6 @@ ImpressionistUI::ImpressionistUI() {
 		// Fl Box
 		m_PaintlyBox = new Fl_Box(FL_THIN_UP_BOX, 5, 35, 395, 230, NULL);
 
-
 		// Threshold slider
 		m_ThresSlider = new Fl_Value_Slider(15, 40, 200, 20, "Threshold");
 		m_ThresSlider->user_data((void*)(this));	// record self to be used by static callback functions
@@ -887,8 +1113,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_ThresSlider->minimum(0);
 		m_ThresSlider->maximum(250);
 		m_ThresSlider->step(1);
-		m_ThresSlider->value(m_nSize);
+		m_ThresSlider->value(100);
 		m_ThresSlider->align(FL_ALIGN_RIGHT);
+		m_ThresSlider->deactivate();
 		m_ThresSlider->callback(cb_thresSlides);
 
 		// Curvature slider
@@ -900,8 +1127,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_CurveSlider->minimum(0.00);
 		m_CurveSlider->maximum(1.00);
 		m_CurveSlider->step(0.01);
-		m_CurveSlider->value(m_nSize);
+		m_CurveSlider->value(1.00);
 		m_CurveSlider->align(FL_ALIGN_RIGHT);
+		m_CurveSlider->deactivate();
 		m_CurveSlider->callback(cb_curveSlides);
 
 		// Blur slider
@@ -913,8 +1141,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_BlurSlider->minimum(0.00);
 		m_BlurSlider->maximum(1.00);
 		m_BlurSlider->step(0.01);
-		m_BlurSlider->value(m_nSize);
+		m_BlurSlider->value(0.50);
 		m_BlurSlider->align(FL_ALIGN_RIGHT);
+		m_BlurSlider->deactivate();
 		m_BlurSlider->callback(cb_blurSlides);
 
 		// Grid Size slider
@@ -926,8 +1155,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_GridSizeSlider->minimum(0.00);
 		m_GridSizeSlider->maximum(1.00);
 		m_GridSizeSlider->step(0.01);
-		m_GridSizeSlider->value(m_nSize);
+		m_GridSizeSlider->value(1.00);
 		m_GridSizeSlider->align(FL_ALIGN_RIGHT);
+		m_GridSizeSlider->deactivate();
 		m_GridSizeSlider->callback(cb_gridSizeSlides);
 
 		// Min Stroke L slider
@@ -939,8 +1169,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_MinStrokeSlider->minimum(0);
 		m_MinStrokeSlider->maximum(30);
 		m_MinStrokeSlider->step(1);
-		m_MinStrokeSlider->value(m_nSize);
+		m_MinStrokeSlider->value(4);
 		m_MinStrokeSlider->align(FL_ALIGN_RIGHT);
+		m_MinStrokeSlider->deactivate();
 		m_MinStrokeSlider->callback(cb_minStrokeSlides);
 
 		// Max Stroke L slider
@@ -952,8 +1183,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_MaxStrokeSlider->minimum(0);
 		m_MaxStrokeSlider->maximum(30);
 		m_MaxStrokeSlider->step(1);
-		m_MaxStrokeSlider->value(m_nSize);
+		m_MaxStrokeSlider->value(16);
 		m_MaxStrokeSlider->align(FL_ALIGN_RIGHT);
+		m_MaxStrokeSlider->deactivate();
 		m_MaxStrokeSlider->callback(cb_maxStrokeSlides);
 
 		// Alpha slider
@@ -965,8 +1197,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_Alpha2Slider->minimum(0.00);
 		m_Alpha2Slider->maximum(1.00);
 		m_Alpha2Slider->step(0.01);
-		m_Alpha2Slider->value(m_nSize);
+		m_Alpha2Slider->value(1.00);
 		m_Alpha2Slider->align(FL_ALIGN_RIGHT);
+		m_Alpha2Slider->deactivate();
 		m_Alpha2Slider->callback(cb_alpha2Slides);
 
 		// Layers slider
@@ -978,8 +1211,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_LayersSlider->minimum(1);
 		m_LayersSlider->maximum(5);
 		m_LayersSlider->step(1);
-		m_LayersSlider->value(m_nSize);
+		m_LayersSlider->value(3);
 		m_LayersSlider->align(FL_ALIGN_RIGHT);
+		m_LayersSlider->deactivate();
 		m_LayersSlider->callback(cb_layersSlides);
 
 		// R0 Level slider
@@ -991,8 +1225,9 @@ ImpressionistUI::ImpressionistUI() {
 		m_R0LevelSlider->minimum(0);
 		m_R0LevelSlider->maximum(5);
 		m_R0LevelSlider->step(1);
-		m_R0LevelSlider->value(m_nSize);
+		m_R0LevelSlider->value(3);
 		m_R0LevelSlider->align(FL_ALIGN_RIGHT);
+		m_R0LevelSlider->deactivate();
 		m_R0LevelSlider->callback(cb_r0LevelSlides);
 
 		// Jr slider
@@ -1006,6 +1241,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_JrSlider->step(0.01);
 		m_JrSlider->value(0.00);
 		m_JrSlider->align(FL_ALIGN_BOTTOM);
+		m_JrSlider->deactivate();
 		m_JrSlider->callback(cb_jrSlides);
 
 		// Jg slider
@@ -1019,6 +1255,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_JgSlider->step(0.01);
 		m_JgSlider->value(0.00);
 		m_JgSlider->align(FL_ALIGN_BOTTOM);
+		m_JgSlider->deactivate();
 		m_JgSlider->callback(cb_jgSlides);
 
 		// Jb slider
@@ -1032,6 +1269,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_JbSlider->step(0.01);
 		m_JbSlider->value(0.00);
 		m_JbSlider->align(FL_ALIGN_BOTTOM);
+		m_JbSlider->deactivate();
 		m_JbSlider->callback(cb_jbSlides);
 
 		// Jh slider
@@ -1045,6 +1283,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_JhSlider->step(0.01);
 		m_JhSlider->value(0.00);
 		m_JhSlider->align(FL_ALIGN_BOTTOM);
+		m_JhSlider->deactivate();
 		m_JhSlider->callback(cb_jhSlides);
 
 		// Js slider
@@ -1058,6 +1297,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_JsSlider->step(0.01);
 		m_JsSlider->value(0.00);
 		m_JsSlider->align(FL_ALIGN_BOTTOM);
+		m_JsSlider->deactivate();
 		m_JsSlider->callback(cb_jsSlides);
 
 		// Jv slider
@@ -1071,6 +1311,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_JvSlider->step(0.01);
 		m_JvSlider->value(0.00);
 		m_JvSlider->align(FL_ALIGN_BOTTOM);
+		m_JvSlider->deactivate();
 		m_JvSlider->callback(cb_jvSlides);
 
 	m_paintlyDialog->end();
