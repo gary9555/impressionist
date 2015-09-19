@@ -348,7 +348,7 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 
 	}
 
-	pDoc->setPaintStyle(type);
+	pDoc->setBrushType(type);
 }
 
 //------------------------------------------------------------
@@ -616,7 +616,7 @@ void ImpressionistUI::cb_styleChoice(Fl_Widget* o, void* v){
 
 	}
 
-	pDoc->setBrushType(style);
+	pDoc->setPaintStyle(style);
 }
 
 void ImpressionistUI::cb_strokeChoice(Fl_Widget* o, void* v){
@@ -780,6 +780,23 @@ void ImpressionistUI::setDocument(ImpressionistDoc* doc)
 int ImpressionistUI::getSize()
 {
 	return m_nSize;
+}
+
+//------------------------------------------------
+// Return the brush width
+//------------------------------------------------
+int ImpressionistUI::getWidth()
+{
+	return m_nLineWidth;
+}
+
+
+//------------------------------------------------
+// Return the brush angle
+//------------------------------------------------
+int ImpressionistUI::getAngle()
+{
+	return m_nLineAngle;
 }
 
 //-------------------------------------------------

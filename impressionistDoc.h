@@ -29,6 +29,9 @@ public:
 	void	setPaintStyle(int style);		// called by the UI to set the painting style		//////////////////////
 
 	int		getSize();						// get the UI size
+	int		getWidth();						// get the UI width
+	int		getAngle();						// get the UI angle
+
 	void	setSize(int size);				// set the UI size
 	char*	getImageName();					// get the current image name
 	
@@ -53,7 +56,9 @@ public:
 
 
 	// Size of the brush.
-	int m_nSize;							
+	int m_nSize;	
+	int m_nWdith;
+	int m_nAngle;
 
 	ImpressionistUI*	m_pUI;
 
