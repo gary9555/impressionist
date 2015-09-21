@@ -22,10 +22,10 @@ void ScatteredPointBrush::BrushBegin(const Point source, const Point target)
 	ImpressionistUI* dlg = pDoc->m_pUI;
 
 
-	int width = pDoc->getWidth();
+	//int width = pDoc->getWidth();
 
 	
-	glLineWidth((float)width);
+//	glLineWidth((float)width);
 
 
 	BrushMove(source, target);
@@ -42,7 +42,7 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 	}
 
 	int size = pDoc->getSize()/2;
-	int angle = pDoc->getAngle();
+	//int angle = pDoc->getAngle();
 
 	glPointSize(0.1);
 	srand(time(0));

@@ -37,25 +37,33 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 	ImpressionistUI* dlg = pDoc->m_pUI;
 
 	if (pDoc == NULL) {
-		printf("ScatteredLineBrush::BrushMove  document is NULL\n");
+		printf("LineBrush::BrushMove  document is NULL\n");
 		return;
 	}
 
 	int size = pDoc->getSize();
 	int angle = pDoc->getAngle();
 
-
+	
+	srand(time(0));
 	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glTranslatef(source.x, source.y, 0.0);
-	glRotatef(angle, 0.0, 0.0, 1.0);
-	glTranslatef(-source.x, -source.y, 0.0);
-	glBegin(GL_LINE_STRIP);
-	SetColor(source);
-	glVertex2d(source.x - size / 2, source.y);
-	glVertex2d(source.x + size / 2, source.y);
-	glEnd();
-	glPopMatrix();
+	for (int i = 0; i < 4; i++){
+		float length = fRand(1, size/2)*2.5;
+		float dist = fRand(-size*0.3,size*0.3)*2.5;
+		float displacement = fRand(-size*0.75, size*0.75);
+		float x1 = source.x+displacement;
+		float y1 = source.y+dist;
+		glPushMatrix();
+			glTranslatef(x1, y1, 0.0);
+			glRotatef(angle, 0.0, 0.0, 1.0);
+			glTranslatef(-x1, -y1, 0.0);
+			glBegin(GL_LINE_STRIP);
+			SetColor(Point(x1,y1));
+			glVertex2d(x1 - length*0.75, y1);
+			glVertex2d(x1 + length*0.75, y1);
+			glEnd();
+		glPopMatrix();
+	}
 
 
 	/*
