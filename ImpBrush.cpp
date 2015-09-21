@@ -8,6 +8,12 @@
 #include "impressionistUI.h"
 #include "ImpBrush.h"
 
+double fRand(double fMin, double fMax)
+{
+	double f = (double)rand() / RAND_MAX;
+	return fMin + f * (fMax - fMin);
+}
+
 // Static class member initializations
 int			ImpBrush::c_nBrushCount	= 0;
 ImpBrush**	ImpBrush::c_pBrushes	= NULL;

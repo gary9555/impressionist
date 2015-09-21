@@ -8,6 +8,10 @@
 //
 
 #include <stdlib.h>
+#include <cmath>
+#include <ctime>
+
+double fRand(double fMin, double fMax);
 
 // Each brush type has an associated constant.
 enum

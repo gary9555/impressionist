@@ -24,7 +24,7 @@ void ScatteredPointBrush::BrushBegin(const Point source, const Point target)
 
 	int width = pDoc->getWidth();
 
-	//glPointSize((float)size);
+	
 	glLineWidth((float)width);
 
 
@@ -41,21 +41,22 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 		return;
 	}
 
-	int size = pDoc->getSize();
+	int size = pDoc->getSize()/2;
 	int angle = pDoc->getAngle();
 
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glTranslatef(source.x, source.y, 0.0);
-	glRotatef(angle, 0.0, 0.0, 1.0);
-	glTranslatef(-source.x, -source.y, 0.0);
-	glBegin(GL_LINE_STRIP);
-	SetColor(source);
-	glVertex2d(source.x - size / 2, source.y);
-	glVertex2d(source.x + size / 2, source.y);
+	glPointSize(0.1);
+	srand(time(0));
+	glBegin(GL_POINTS);
+		for (float i = source.x - size; i < source.x + size; i++){
+			for (float j = source.y - size; j < source.y + size; j++){
+				float  rnd = fRand(0,1);
+				if (rnd<0.2){
+					SetColor(Point(i, j));
+					glVertex2d(i, j);
+				}
+			}
+		}
 	glEnd();
-	glPopMatrix();
 
 
 	/*

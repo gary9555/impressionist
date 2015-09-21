@@ -9,6 +9,7 @@
 #include "impressionistUI.h"
 #include "CircleBrush.h"
 
+
 extern float frand();
 
 CircleBrush::CircleBrush(ImpressionistDoc* pDoc, char* name) :
@@ -22,10 +23,10 @@ void CircleBrush::BrushBegin(const Point source, const Point target)
 	ImpressionistUI* dlg = pDoc->m_pUI;
 
 
-	int width = pDoc->getWidth();
+	//int width = pDoc->getWidth();
 
 	//glPointSize((float)size);
-	glLineWidth((float)width);
+	//glLineWidth((float)width);
 
 
 	BrushMove(source, target);
@@ -41,21 +42,23 @@ void CircleBrush::BrushMove(const Point source, const Point target)
 		return;
 	}
 
-	int size = pDoc->getSize();
-	int angle = pDoc->getAngle();
+	float size = pDoc->getSize()/2;
+	//int angle = pDoc->getAngle();
+	int x1 = source.x;
+	int y1 = source.y;
 
+	glBegin(GL_TRIANGLE_FAN);
+		SetColor(source);
+		glVertex2f(x1, y1);
 
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glTranslatef(source.x, source.y, 0.0);
-	glRotatef(angle, 0.0, 0.0, 1.0);
-	glTranslatef(-source.x, -source.y, 0.0);
-	glBegin(GL_LINE_STRIP);
-	SetColor(source);
-	glVertex2d(source.x - size / 2, source.y);
-	glVertex2d(source.x + size / 2, source.y);
+		for (float angle = 1.0f; angle<361.0f; angle += 0.2)
+		{
+			float x2 = x1 + sin(angle)*size;
+			float y2= y1 + cos(angle)*size;
+			glVertex2f(x2, y2);
+		}
 	glEnd();
-	glPopMatrix();
+	srand(time(0));
 
 
 	/*

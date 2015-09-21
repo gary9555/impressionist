@@ -22,10 +22,10 @@ void ScatteredCircleBrush::BrushBegin(const Point source, const Point target)
 	ImpressionistUI* dlg = pDoc->m_pUI;
 
 
-	int width = pDoc->getWidth();
+	//int width = pDoc->getWidth();
 
 	//glPointSize((float)size);
-	glLineWidth((float)width);
+	//glLineWidth((float)width);
 
 
 	BrushMove(source, target);
@@ -41,22 +41,28 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
 		return;
 	}
 
-	int size = pDoc->getSize();
-	int angle = pDoc->getAngle();
+	int size = pDoc->getSize() / 2;
+	//int angle = pDoc->getAngle();
 
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glTranslatef(source.x, source.y, 0.0);
-	glRotatef(angle, 0.0, 0.0, 1.0);
-	glTranslatef(-source.x, -source.y, 0.0);
-	glBegin(GL_LINE_STRIP);
-	SetColor(source);
-	glVertex2d(source.x - size / 2, source.y);
-	glVertex2d(source.x + size / 2, source.y);
-	glEnd();
-	glPopMatrix();
-
+	
+	
+	srand(time(0));
+	for (int i = 0; i < 4; i++){	
+		glBegin(GL_TRIANGLE_FAN);			
+				double dist = fRand(0,size);
+				double ang = fRand(0, 359);
+				float x1 = source.x + sin(ang)*size;
+				float y1 = source.y + cos(ang)*size;
+				SetColor(Point(x1,y1));
+				glVertex2f(x1, y1);
+				for (float angle = 1.0f; angle < 361.0f; angle += 0.2)
+				{
+					float x2 = x1 + sin(angle)*size;
+					float y2 = y1 + cos(angle)*size;
+					glVertex2f(x2, y2);
+				}	
+		glEnd();
+	}
 
 	/*
 

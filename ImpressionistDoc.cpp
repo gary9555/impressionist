@@ -45,14 +45,14 @@ ImpressionistDoc::ImpressionistDoc()
 	ImpBrush::c_pBrushes[BRUSH_CIRCLES]				
 		= new CircleBrush( this, "Circles" );
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_POINTS]	
-		= new ScatteredCircleBrush(this, "Scattered Points");
+		= new ScatteredPointBrush(this, "Scattered Points");
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_LINES]		
 		= new ScatteredLineBrush(this, "Scattered Lines");
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_CIRCLES]	
-		= new ScatteredPointBrush(this, "Scattered Circles");
+		= new ScatteredCircleBrush(this, "Scattered Circles");
 
 	// make one of the brushes current
-	m_pCurrentBrush	= ImpBrush::c_pBrushes[1];
+	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
 
 }
 
