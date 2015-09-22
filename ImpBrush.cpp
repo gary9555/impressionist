@@ -58,3 +58,23 @@ void ImpBrush::SetColor (const Point source)
 	glColor3ubv( color );
 
 }
+
+//----------------------------------------------------
+// Set the color to paint with to the color at source,
+// which is the coord at the original window to sample 
+// the color from
+//----------------------------------------------------
+void ImpBrush::SetColorOpac(const Point source, double opacity)
+{
+	ImpressionistDoc* pDoc = GetDocument();
+
+
+	GLubyte color[4];
+
+	memcpy(color, pDoc->GetOriginalPixel(source), 3);
+	color[3] = opacity * 255;
+	//glColor3ubv(color);
+	glColor4ubv(color);
+
+}
+

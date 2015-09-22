@@ -43,7 +43,10 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
 
 	int size = pDoc->getSize() / 2;
 	//int angle = pDoc->getAngle();
+	double opacity = pDoc->getOpac();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	
 	srand(time(0));
@@ -53,7 +56,7 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
 				double ang = fRand(0, 359);
 				float x1 = source.x + sin(ang)*size;
 				float y1 = source.y + cos(ang)*size;
-				SetColor(Point(x1,y1));
+				SetColorOpac(Point(x1,y1),opacity);
 				glVertex2f(x1, y1);
 				for (float angle = 1.0f; angle < 361.0f; angle += 0.2)
 				{

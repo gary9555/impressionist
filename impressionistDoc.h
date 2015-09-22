@@ -31,6 +31,7 @@ public:
 	int		getSize();						// get the UI size
 	int		getWidth();						// get the UI width
 	int		getAngle();						// get the UI angle
+	double	getOpac();						// get the UI alpha
 
 	void	setSize(int size);				// set the UI size
 	char*	getImageName();					// get the current image name

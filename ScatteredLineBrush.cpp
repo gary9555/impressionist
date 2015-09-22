@@ -43,7 +43,10 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 
 	int size = pDoc->getSize();
 	int angle = pDoc->getAngle();
+	double opacity = pDoc->getOpac();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	srand(time(0));
 	glMatrixMode(GL_MODELVIEW);
@@ -58,7 +61,7 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 			glRotatef(angle, 0.0, 0.0, 1.0);
 			glTranslatef(-x1, -y1, 0.0);
 			glBegin(GL_LINE_STRIP);
-			SetColor(Point(x1,y1));
+			SetColorOpac(Point(x1,y1),opacity);
 			glVertex2d(x1 - length*0.75, y1);
 			glVertex2d(x1 + length*0.75, y1);
 			glEnd();

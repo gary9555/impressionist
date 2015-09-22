@@ -43,6 +43,10 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 
 	int size = pDoc->getSize()/2;
 	//int angle = pDoc->getAngle();
+	double opacity = pDoc->getOpac();
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glPointSize(0.1);
 	srand(time(0));
@@ -51,7 +55,7 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 			for (float j = source.y - size; j < source.y + size; j++){
 				float  rnd = fRand(0,1);
 				if (rnd<0.2){
-					SetColor(Point(i, j));
+					SetColorOpac(Point(i, j),opacity);
 					glVertex2d(i, j);
 				}
 			}

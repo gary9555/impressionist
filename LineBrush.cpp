@@ -42,8 +42,11 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	}
 	
 	int size = pDoc->getSize();
-	int angle = pDoc->getAngle();
-	
+	int angle = pDoc->getAngle();	
+	double opacity = pDoc->getOpac();
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
@@ -51,7 +54,7 @@ void LineBrush::BrushMove(const Point source, const Point target)
 		glRotatef(angle, 0.0, 0.0, 1.0);
 		glTranslatef(-source.x, -source.y, 0.0);
 		glBegin(GL_LINE_STRIP);
-			SetColor(source);	
+			SetColorOpac(source,opacity);	
 			glVertex2d(source.x-size/2, source.y);
 			glVertex2d(source.x + size/2, source.y);
 		glEnd();

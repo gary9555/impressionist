@@ -39,12 +39,16 @@ void PointBrush::BrushMove( const Point source, const Point target )
 		printf( "PointBrush::BrushMove  document is NULL\n" );
 		return;
 	}
+	
+	double opacity = pDoc->getOpac();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	glBegin( GL_POINTS );
-		SetColor( source );
-
+	glColor4f(0.5, 0.5, 0.5, opacity);
+		SetColorOpac(source, opacity);
 		glVertex2d( target.x, target.y );
-
 	glEnd();
 }
 

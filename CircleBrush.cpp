@@ -46,9 +46,13 @@ void CircleBrush::BrushMove(const Point source, const Point target)
 	//int angle = pDoc->getAngle();
 	int x1 = source.x;
 	int y1 = source.y;
+	double opacity = pDoc->getOpac();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 	glBegin(GL_TRIANGLE_FAN);
-		SetColor(source);
+		SetColorOpac(source,opacity);
 		glVertex2f(x1, y1);
 
 		for (float angle = 1.0f; angle<361.0f; angle += 0.2)
