@@ -113,7 +113,7 @@ void PaintView::draw()
 			m_pDoc->m_pCurrentBrush->BrushMove( source, target );
 			break;
 		case LEFT_MOUSE_UP:
-			//m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
+			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
 
 			SaveCurrentContent();
 			RestoreContent();

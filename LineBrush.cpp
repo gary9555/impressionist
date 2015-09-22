@@ -11,6 +11,10 @@
 
 extern float frand();
 
+static Point prev(-1,-1);
+static Point current(-1, -1);
+static bool brushFlag = false;
+
 LineBrush::LineBrush(ImpressionistDoc* pDoc, char* name) :
 ImpBrush(pDoc, name)
 {
@@ -24,7 +28,6 @@ void LineBrush::BrushBegin(const Point source, const Point target)
 	
 	int width = pDoc->getWidth();
 
-	//glPointSize((float)size);
 	glLineWidth((float)width);
 	
 	
@@ -56,6 +59,17 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	// Slider/Right mouse 
 	case 0:
 		// don't have to change size and angle value
+		glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glTranslatef(target.x, target.y, 0.0);
+			glRotatef(angle, 0.0, 0.0, 1.0);
+			glTranslatef(-target.x, -target.y, 0.0);
+			glBegin(GL_LINE_STRIP);
+				SetColorOpac(source, opacity);
+				glVertex2d(target.x - size / 2, target.y);
+				glVertex2d(target.x + size / 2, target.y);
+			glEnd();
+		glPopMatrix();
 		break;
 	
 	// Gradient
@@ -77,10 +91,46 @@ void LineBrush::BrushMove(const Point source, const Point target)
 		Gy = intensity[0][0] * (-1) + intensity[1][0] * (-2) + intensity[2][0] * (-1)\
 			+ intensity[0][2] * (1) + intensity[1][2] * (2) + intensity[2][2] * (1);
 		angle = -(int)(atan2(Gy, Gx)*57.32) % 360;
+		
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+			glTranslatef(target.x, target.y, 0.0);
+			glRotatef(angle, 0.0, 0.0, 1.0);
+			glTranslatef(-target.x, -target.y, 0.0);
+			glBegin(GL_LINE_STRIP);
+				SetColorOpac(source, opacity);
+				glVertex2d(target.x - size / 2, target.y);
+				glVertex2d(target.x + size / 2, target.y);
+			glEnd();
+		glPopMatrix();
 		break;
 	
 	// Brush direction
 	case 2:
+		current.x = target.x;
+		current.y = target.y;
+		if (prev.x!=-1&&current.x!=-1&&(current.x != prev.x || current.y != prev.y)){
+			int dx = current.x - prev.x;
+			int dy = current.y - prev.y;
+			angle = (int)(atan2(dy, dx)*57.32) % 360;
+
+			
+
+			glMatrixMode(GL_MODELVIEW);
+				glPushMatrix();
+				glTranslatef(target.x, target.y, 0.0);
+				glRotatef(angle, 0.0, 0.0, 1.0);
+				glTranslatef(-target.x, -target.y, 0.0);
+				glBegin(GL_LINE_STRIP);
+					SetColorOpac(source, opacity);
+					glVertex2d(target.x - size / 2, target.y);
+					glVertex2d(target.x + size / 2, target.y);
+				glEnd();
+			glPopMatrix();
+		}
+		prev.x = current.x;
+		prev.y = current.y;
+		brushFlag = true;
 		break;
 
 	default:
@@ -88,34 +138,31 @@ void LineBrush::BrushMove(const Point source, const Point target)
 
 	}
 
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-		glTranslatef(target.x, target.y, 0.0);
-		glRotatef(angle, 0.0, 0.0, 1.0);
-		glTranslatef(-target.x, -target.y, 0.0);
-		glBegin(GL_LINE_STRIP);
-			SetColorOpac(source,opacity);	
-			glVertex2d(target.x - size / 2, target.y);
-			glVertex2d(target.x + size / 2, target.y);
-		glEnd();
-	glPopMatrix();
+	
 }
 
 void LineBrush::BrushEnd(const Point source, const Point target)
 {
-	
-	ImpressionistDoc* pDoc = GetDocument();
-	ImpressionistUI* dlg = pDoc->m_pUI;
-	
+	if (!brushFlag){
+		ImpressionistDoc* pDoc = GetDocument();
+		ImpressionistUI* dlg = pDoc->m_pUI;
 
-	int dx = target.x - source.x;
-	int dy = target.y - source.y;
-	int size = sqrt(dx*dx + dy*dy);
-	int angle = -(int)(atan2(dy, dx)*57.32)%360;
 
-	dlg->setAngle(angle);
-	dlg->setSize(size);
+		int dx = target.x - source.x;
+		int dy = target.y - source.y;
+		int size = sqrt(dx*dx + dy*dy);
+		int angle = -(int)(atan2(dy, dx)*57.32) % 360;
 
+		dlg->setAngle(angle);
+		dlg->setSize(size);
+	}
+	else{
+		prev.x = -1;
+		prev.y = -1;
+		current.x = -1;
+		current.y = -1;
+		brushFlag = false;
+	}
 	
 	
 
