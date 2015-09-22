@@ -816,7 +816,23 @@ void ImpressionistUI::setSize( int size )
 
 	if (size<=40) 
 		m_BrushSizeSlider->value(m_nSize);
+	else
+		m_BrushSizeSlider->value(40);
+
 }
+
+//-------------------------------------------------
+// Set the brush angle
+//-------------------------------------------------
+void ImpressionistUI::setAngle(int angle)
+{
+	m_nLineAngle = angle;
+	if (m_nLineAngle < 0)
+		m_nLineAngle += 360;
+
+	m_LineAngleSlider->value(m_nLineAngle);
+}
+
 
 // Main menu definition
 Fl_Menu_Item ImpressionistUI::menuitems[] = {

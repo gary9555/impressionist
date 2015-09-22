@@ -128,6 +128,20 @@ double ImpressionistDoc::getOpac()
 }
 
 //---------------------------------------------------------
+// sets the size of the brush in the UI, thus read back by the pDOC
+//---------------------------------------------------------
+void ImpressionistDoc::setBrushSize(int size){
+	m_pUI->setSize(size);
+}
+
+//---------------------------------------------------------
+// sets the angle of the brush in the UI, thus read back by the pDOC
+//---------------------------------------------------------
+void ImpressionistDoc::setBrushAngle(int angle){
+	m_pUI->setAngle(angle);
+}
+
+//---------------------------------------------------------
 // Load the specified image
 // This is called by the UI when the load image button is 
 // pressed.

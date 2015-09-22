@@ -27,6 +27,8 @@
 static int		eventToDo;
 static int		isAnEvent=0;
 static Point	coord;
+static Point	starting;
+static Point	ending;
 
 PaintView::PaintView(int			x, 
 					 int			y, 
@@ -111,19 +113,22 @@ void PaintView::draw()
 			m_pDoc->m_pCurrentBrush->BrushMove( source, target );
 			break;
 		case LEFT_MOUSE_UP:
-			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
+			//m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
 
 			SaveCurrentContent();
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
-
+			starting.x = coord.x; 
+			starting.y = coord.y;
 			break;
 		case RIGHT_MOUSE_DRAG:
 
 			break;
 		case RIGHT_MOUSE_UP:
-
+			ending.x = coord.x;
+			ending.y = coord.y;
+			m_pDoc->m_pCurrentBrush->BrushEnd(starting, ending);
 			break;
 
 		default:
@@ -209,7 +214,7 @@ void PaintView::SaveCurrentContent()
 	// Tell openGL to read from the front buffer when capturing
 	// out paint strokes
 	glReadBuffer(GL_FRONT);
-
+	//glReadBuffer(GL_BACK);
 	glPixelStorei( GL_PACK_ALIGNMENT, 1 );
 	glPixelStorei( GL_PACK_ROW_LENGTH, m_pDoc->m_nPaintWidth );
 	
@@ -238,5 +243,5 @@ void PaintView::RestoreContent()
 				  GL_UNSIGNED_BYTE, 
 				  m_pPaintBitstart);
 
-//	glDrawBuffer(GL_FRONT);
+	//glDrawBuffer(GL_FRONT);
 }

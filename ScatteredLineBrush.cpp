@@ -76,7 +76,16 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 
 void ScatteredLineBrush::BrushEnd(const Point source, const Point target)
 {
-	// do nothing so far
+	ImpressionistDoc* pDoc = GetDocument();
+	ImpressionistUI* dlg = pDoc->m_pUI;
+
+	int dx = target.x - source.x;
+	int dy = target.y - source.y;
+	int size = sqrt(dx*dx + dy*dy);
+	int angle = -(int)(atan2(dy, dx)*57.32) % 360;
+
+	dlg->setAngle(angle);
+	dlg->setSize(size);
 }
 
 char* ScatteredLineBrush::BrushName(void){

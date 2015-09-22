@@ -44,10 +44,50 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	int size = pDoc->getSize();
 	int angle = pDoc->getAngle();	
 	double opacity = pDoc->getOpac();
-
+	int strokeDirChoice = dlg->m_StrokeDirChoice->value();
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
+	
+		
+	switch (strokeDirChoice){
+	
+	// Slider/Right mouse 
+	case 0:
+		// don't have to change size and angle value
+		break;
+	
+	// Gradient
+	case 1:
+		// change angle value according to 
+		// the gradient at this point
+		double Gx;
+		double Gy;
+		GLubyte color[3][3][3];
+		double intensity[3][3];
+		for (int i = -1; i < 2; i++){
+			for (int j = -1; j < 2; j++){
+				memcpy(color[i+1][j+1], pDoc->GetOriginalPixel(Point(source.x + i, source.y + j)), 3);
+				intensity[i + 1][j + 1] = 0.299*color[i + 1][j + 1][0] + 0.587*color[i + 1][j + 1][1] + 0.144*color[i + 1][j + 1][2];
+			}
+		}
+		Gx = intensity[0][0] * (-1) + intensity[0][1] * (-2) + intensity[0][2] * (-1)\
+				  + intensity[2][0] * (1) + intensity[2][1] * (2) + intensity[2][2] * (1);
+		Gy = intensity[0][0] * (-1) + intensity[1][0] * (-2) + intensity[2][0] * (-1)\
+			+ intensity[0][2] * (1) + intensity[1][2] * (2) + intensity[2][2] * (1);
+		angle = -(int)(atan2(Gy, Gx)*57.32) % 360;
+		break;
+	
+	// Brush direction
+	case 2:
+		break;
+
+	default:
+		break;
+
+	}
+
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 		glTranslatef(target.x, target.y, 0.0);
@@ -59,16 +99,26 @@ void LineBrush::BrushMove(const Point source, const Point target)
 			glVertex2d(target.x + size / 2, target.y);
 		glEnd();
 	glPopMatrix();
-		
-	
-	/*
-	
-	*/
 }
 
 void LineBrush::BrushEnd(const Point source, const Point target)
 {
-	// do nothing so far
+	
+	ImpressionistDoc* pDoc = GetDocument();
+	ImpressionistUI* dlg = pDoc->m_pUI;
+	
+
+	int dx = target.x - source.x;
+	int dy = target.y - source.y;
+	int size = sqrt(dx*dx + dy*dy);
+	int angle = -(int)(atan2(dy, dx)*57.32)%360;
+
+	dlg->setAngle(angle);
+	dlg->setSize(size);
+
+	
+	
+
 }
 
 char* LineBrush::BrushName(void){
