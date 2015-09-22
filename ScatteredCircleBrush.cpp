@@ -54,9 +54,9 @@ void ScatteredCircleBrush::BrushMove(const Point source, const Point target)
 		glBegin(GL_TRIANGLE_FAN);			
 				double dist = fRand(0,size);
 				double ang = fRand(0, 359);
-				float x1 = source.x + sin(ang)*size;
-				float y1 = source.y + cos(ang)*size;
-				SetColorOpac(Point(x1,y1),opacity);
+				float x1 = target.x + sin(ang)*size;
+				float y1 = target.y + cos(ang)*size;
+				SetColorOpac(Point(source.x + sin(ang)*size, source.y + cos(ang)*size), opacity);
 				glVertex2f(x1, y1);
 				for (float angle = 1.0f; angle < 361.0f; angle += 0.2)
 				{

@@ -54,14 +54,14 @@ void ScatteredLineBrush::BrushMove(const Point source, const Point target)
 		float length = fRand(1, size/2)*2.5;
 		float dist = fRand(-size*0.3,size*0.3)*2.5;
 		float displacement = fRand(-size*0.75, size*0.75);
-		float x1 = source.x+displacement;
-		float y1 = source.y+dist;
+		float x1 = target.x+displacement;
+		float y1 = target.y + dist;
 		glPushMatrix();
 			glTranslatef(x1, y1, 0.0);
 			glRotatef(angle, 0.0, 0.0, 1.0);
 			glTranslatef(-x1, -y1, 0.0);
 			glBegin(GL_LINE_STRIP);
-			SetColorOpac(Point(x1,y1),opacity);
+			SetColorOpac(Point(source.x + displacement, source.y + dist), opacity);
 			glVertex2d(x1 - length*0.75, y1);
 			glVertex2d(x1 + length*0.75, y1);
 			glEnd();

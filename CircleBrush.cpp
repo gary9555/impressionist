@@ -44,8 +44,8 @@ void CircleBrush::BrushMove(const Point source, const Point target)
 
 	float size = pDoc->getSize()/2;
 	//int angle = pDoc->getAngle();
-	int x1 = source.x;
-	int y1 = source.y;
+	int x1 = target.x;
+	int y1 = target.y;
 	double opacity = pDoc->getOpac();
 
 	glEnable(GL_BLEND);
@@ -62,7 +62,7 @@ void CircleBrush::BrushMove(const Point source, const Point target)
 			glVertex2f(x2, y2);
 		}
 	glEnd();
-	srand(time(0));
+	
 
 
 	/*

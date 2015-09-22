@@ -51,11 +51,11 @@ void ScatteredPointBrush::BrushMove(const Point source, const Point target)
 	glPointSize(0.1);
 	srand(time(0));
 	glBegin(GL_POINTS);
-		for (float i = source.x - size; i < source.x + size; i++){
-			for (float j = source.y - size; j < source.y + size; j++){
+		for (float i = target.x - size; i < target.x + size; i++){
+			for (float j = target.y - size; j < target.y + size; j++){
 				float  rnd = fRand(0,1);
 				if (rnd<0.2){
-					SetColorOpac(Point(i, j),opacity);
+					SetColorOpac(Point(i - target.x + source.x, j-target.y+source.y), opacity);
 					glVertex2d(i, j);
 				}
 			}

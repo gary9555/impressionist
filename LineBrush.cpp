@@ -50,13 +50,13 @@ void LineBrush::BrushMove(const Point source, const Point target)
 	
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-		glTranslatef(source.x, source.y, 0.0);
+		glTranslatef(target.x, target.y, 0.0);
 		glRotatef(angle, 0.0, 0.0, 1.0);
-		glTranslatef(-source.x, -source.y, 0.0);
+		glTranslatef(-target.x, -target.y, 0.0);
 		glBegin(GL_LINE_STRIP);
 			SetColorOpac(source,opacity);	
-			glVertex2d(source.x-size/2, source.y);
-			glVertex2d(source.x + size/2, source.y);
+			glVertex2d(target.x - size / 2, target.y);
+			glVertex2d(target.x + size / 2, target.y);
 		glEnd();
 	glPopMatrix();
 		
