@@ -11,9 +11,9 @@
 
 extern float frand();
 
-static Point prev(-1,-1);
+static Point prev(-1, -1);
 static Point current(-1, -1);
-static bool brushFlag = false;
+bool LineBrush::isRightMouse = false;
 
 LineBrush::LineBrush(ImpressionistDoc* pDoc, char* name) :
 ImpBrush(pDoc, name)
@@ -130,7 +130,6 @@ void LineBrush::BrushMove(const Point source, const Point target)
 		}
 		prev.x = current.x;
 		prev.y = current.y;
-		brushFlag = true;
 		break;
 
 	default:
@@ -143,26 +142,47 @@ void LineBrush::BrushMove(const Point source, const Point target)
 
 void LineBrush::BrushEnd(const Point source, const Point target)
 {
-	if (!brushFlag){
-		ImpressionistDoc* pDoc = GetDocument();
-		ImpressionistUI* dlg = pDoc->m_pUI;
-
-
-		int dx = target.x - source.x;
-		int dy = target.y - source.y;
-		int size = sqrt(dx*dx + dy*dy);
-		int angle = -(int)(atan2(dy, dx)*57.32) % 360;
-
-		dlg->setAngle(angle);
-		dlg->setSize(size);
+	ImpressionistDoc* pDoc = GetDocument();
+	ImpressionistUI* dlg = pDoc->m_pUI;
+	int strokeDirChoice = dlg->m_StrokeDirChoice->value();
+	
+	// values useful for the right mouse drag
+	int dx = target.x - source.x;
+	int dy = target.y - source.y;
+	int size = sqrt(dx*dx + dy*dy);
+	int angle = -(int)(atan2(dy, dx)*57.32) % 360;
+	
+	switch(strokeDirChoice){  
+	//  slider/right mouse mode
+	case 0: 	
+		if (isRightMouse){
+			dlg->setAngle(angle);
+			dlg->setSize(size);
+		}
+		break;
+	
+	// gradient mode: do nothing
+	case 1:   
+		if (isRightMouse){
+			dlg->setSize(size);
+		}
+		break;
+	
+	// brush direction mode
+	case 2:  
+		if (!isRightMouse){
+			prev.x = -1;
+			prev.y = -1;
+			current.x = -1;
+			current.y = -1;
+		}
+		break;
+		
+	default:
+		break;		
+		
 	}
-	else{
-		prev.x = -1;
-		prev.y = -1;
-		current.x = -1;
-		current.y = -1;
-		brushFlag = false;
-	}
+	
 	
 	
 

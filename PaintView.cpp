@@ -9,6 +9,8 @@
 #include "impressionistUI.h"
 #include "paintview.h"
 #include "ImpBrush.h"
+#include "LineBrush.h"
+#include "ScatteredLineBrush.h"
 
 
 #define LEFT_MOUSE_DOWN		1
@@ -27,8 +29,9 @@
 static int		eventToDo;
 static int		isAnEvent=0;
 static Point	coord;
-static Point	starting;
+static Point	astarting;  // for the angle calculation
 static Point	ending;
+static Point	lstarting;   // for displaying the red line
 
 PaintView::PaintView(int			x, 
 					 int			y, 
@@ -73,7 +76,8 @@ void PaintView::draw()
 	int drawWidth, drawHeight;
 	drawWidth = min( m_nWindowWidth, m_pDoc->m_nPaintWidth );
 	drawHeight = min( m_nWindowHeight, m_pDoc->m_nPaintHeight );
-
+	//drawWidth = min(m_nWindowWidth, m_pDoc->m_nWidth);
+	//drawHeight = min(m_nWindowHeight, m_pDoc->m_nHeight);
 	int startrow = m_pDoc->m_nPaintHeight - (scrollpos.y + drawHeight);
 	if ( startrow < 0 ) startrow = 0;
 
@@ -113,23 +117,52 @@ void PaintView::draw()
 			m_pDoc->m_pCurrentBrush->BrushMove( source, target );
 			break;
 		case LEFT_MOUSE_UP:
+			LineBrush::isRightMouse = false;
+			ScatteredLineBrush::isRightMouse = false;
 			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
-
+			//LineBrush::brushFlag = 0;
 			SaveCurrentContent();
 			RestoreContent();
 			break;
 		case RIGHT_MOUSE_DOWN:
-			starting.x = coord.x; 
-			starting.y = coord.y;
+			astarting.x = coord.x; 
+			astarting.y = coord.y;
+			lstarting.x = target.x;
+			lstarting.y = target.y;
+
+			SaveCurrentContent();
 			break;
 		case RIGHT_MOUSE_DRAG:
+			glBegin(GL_LINE_STRIP);
+			glColor3f(1, 0, 0);
+			glVertex2d(lstarting.x, lstarting.y);
+			glVertex2d(target.x, target.y);
+			glEnd();
+			
+			glDrawBuffer(GL_FRONT);
 
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			glRasterPos2i(0, m_nWindowHeight - m_nDrawHeight);
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			glPixelStorei(GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth);
+			glDrawPixels(m_nDrawWidth,
+				m_nDrawHeight,
+				GL_RGB,
+				GL_UNSIGNED_BYTE,
+				m_pPaintBitstart);
+			//RestoreContent();
+			
 			break;
 		case RIGHT_MOUSE_UP:
+			LineBrush::isRightMouse = true;
+			ScatteredLineBrush::isRightMouse = true;
 			ending.x = coord.x;
 			ending.y = coord.y;
-			m_pDoc->m_pCurrentBrush->BrushEnd(starting, ending);
-			break;
+			m_pDoc->m_pCurrentBrush->BrushEnd(astarting, ending);
+			RestoreContent();
+																// pass the starting and ending position of the mouse 
+			break;												// finished with right dragging
 
 		default:
 			printf("Unknown event!!\n");		

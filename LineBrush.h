@@ -18,6 +18,11 @@ public:
 	void BrushMove(const Point source, const Point target);
 	void BrushEnd(const Point source, const Point target);
 	char* BrushName(void);
+
+	static bool isRightMouse;    // false: left mouse event ;  true: right mouse event 
+	//static Point prev;
+	//static Point current;
+	//static int brushFlag;
 };
 
 #endif
