@@ -219,6 +219,28 @@ void ImpressionistUI::cb_clear_canvas(Fl_Menu_* o, void* v)
 	pDoc->clearCanvas();
 }
 
+//------------------------------------------------------------
+// Adds an undo effect to retore to the last move
+// Called by the UI when the undo menu item is chosen
+//------------------------------------------------------------
+void ImpressionistUI::cb_undo(Fl_Menu_* o, void* v)
+{
+	ImpressionistDoc* pDoc = whoami(o)->getDocument();
+	if (pDoc->m_ucUndo){
+		
+	unsigned char* temp = pDoc->m_ucPainting;
+		pDoc->m_ucPainting = pDoc->m_ucUndo;
+		pDoc->m_ucUndo = temp;
+		whoami(o)->m_paintView->refresh();
+		delete[] pDoc->m_ucUndo;
+		pDoc->m_ucUndo = NULL;
+		//pDoc->m_pUI->m_paintView->SaveCurrentContent();
+
+	//	delete [] temp;
+	}
+	//glFlush();
+}
+
 
 
 
@@ -329,6 +351,7 @@ void ImpressionistUI::cb_brushChoice(Fl_Widget* o, void* v)
 	case BRUSH_CIRCLES:
 	case BRUSH_SCATTERED_POINTS:
 	case BRUSH_SCATTERED_CIRCLES:
+	case BRUSH_LOVE:
 		pUI->m_StrokeDirChoice->deactivate();
 		pUI->m_LineWidthSlider->deactivate();
 		pUI->m_LineAngleSlider->deactivate();
@@ -435,6 +458,21 @@ void ImpressionistUI::cb_edgeThresSlides(Fl_Widget* o, void* v){
 }
 
 void ImpressionistUI::cb_DoItButton(Fl_Widget* o, void* v){
+
+}
+
+void ImpressionistUI::cb_SwapContentButton(Fl_Widget* o, void* v){
+	
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+	ImpressionistDoc *pDoc = pUI->getDocument();
+	
+	unsigned char*	temp = pDoc->m_ucBitmap;
+	pDoc->m_ucBitmap = pDoc->m_ucPainting;
+	pDoc->m_ucPainting = temp;
+	
+	pUI->m_origView->refresh();
+	pUI->m_paintView->refresh();
+
 
 }
 
@@ -840,26 +878,27 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Load Image...",	FL_ALT + 'l', (Fl_Callback *)ImpressionistUI::cb_load_image },
 		{ "&Save Image...",	FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_save_image },
 		{ "&Brushes...",	FL_ALT + 'b', (Fl_Callback *)ImpressionistUI::cb_brushes }, 
-		{ "&Clear Canvas", FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas, 0, FL_MENU_DIVIDER },
+		{ "&Clear Canvas",	FL_ALT + 'c', (Fl_Callback *)ImpressionistUI::cb_clear_canvas },
+		{ "&Undo",		    FL_ALT + 'u', (Fl_Callback *)ImpressionistUI::cb_undo, 0, FL_MENU_DIVIDER },
 		
 		{ "&Colors...",		FL_ALT + 'k', (Fl_Callback *)ImpressionistUI::cb_colors}, 
-		{ "&Paintly...", FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_paintly, 0, FL_MENU_DIVIDER },
+		{ "&Paintly...",	FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_paintly, 0, FL_MENU_DIVIDER },
 
-		{ "Load Edge Image...", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_load_edge_image },
-		{ "Load Another Image...", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image, 0, FL_MENU_DIVIDER },
+		{ "Load Edge Image...",		FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_load_edge_image },
+		{ "Load Another Image...",  FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image, 0, FL_MENU_DIVIDER },
 
-		{ "&Quit",			FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
+		{ "&Quit",			 FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
 
 	{ "&Display", 0, 0, 0, FL_SUBMENU },
 		{ "&Original Image", FL_ALT + 'o', (Fl_Callback *)ImpressionistUI::cb_originalImage },
-		{ "&Edge Image", FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_edge_image },
-		{ "&Another Image", FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_another_image },
+		{ "&Edge Image",	 FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_edge_image },
+		{ "&Another Image",  FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_another_image },
 		{ 0 },
 
 	{ "&Options", 0, 0, 0, FL_SUBMENU },
 		{ "&Faster", FL_ALT + 'f', (Fl_Callback *)ImpressionistUI::cb_faster },
-		{ "&Safer", FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_safer },
+		{ "&Safer",  FL_ALT + 's', (Fl_Callback *)ImpressionistUI::cb_safer },
 		{ 0 },
 
 	{ "&Help",		0, 0, 0, FL_SUBMENU },
@@ -877,6 +916,7 @@ Fl_Menu_Item ImpressionistUI::brushTypeMenu[NUM_BRUSH_TYPE+1] = {
   {"Scattered Points",	FL_ALT+'q', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_POINTS},
   {"Scattered Lines",	FL_ALT+'m', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_LINES},
   {"Scattered Circles",	FL_ALT+'d', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_SCATTERED_CIRCLES},
+  { "Love",				FL_ALT+'o', (Fl_Callback *)ImpressionistUI::cb_brushChoice, (void *)BRUSH_LOVE },
   {0}
 };
 
@@ -1105,6 +1145,11 @@ ImpressionistUI::ImpressionistUI() {
 		m_DoItButton = new Fl_Button(330, 288, 45, 25, "&Do it");
 		m_DoItButton->user_data((void*)(this));
 		m_DoItButton->callback(cb_DoItButton);
+
+		// swap content button
+		m_PaintButton = new Fl_Button(285, 45, 45, 25, "&Swap");
+		m_PaintButton->user_data((void*)(this));
+		m_PaintButton->callback(cb_SwapContentButton);
 
 
     m_brushDialog->end();	

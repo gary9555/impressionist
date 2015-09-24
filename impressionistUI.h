@@ -70,6 +70,7 @@ public:
 	Fl_Slider*			m_AlphaSlider;
 	Fl_Light_Button*	m_EdgeClippingButton;
 	Fl_Light_Button*	m_AnotherGradientButton;
+	Fl_Button*          m_SwapContent;
 		
 	Fl_Box*				m_SpacingBox;
 	Fl_Slider*			m_SpacingSlider;
@@ -202,7 +203,9 @@ private:
 		static void cb_PaintButton(Fl_Widget* o, void* v);				/////////////
 		static void cb_edgeThresSlides(Fl_Widget* o, void* v);			/////////////
 		static void cb_DoItButton(Fl_Widget* o, void* v);				/////////////
+		static void cb_SwapContentButton(Fl_Widget* o, void* v);		/////////////
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
+	static void	cb_undo(Fl_Menu_* o, void* v);							//////////////
 	static void	cb_colors(Fl_Menu_* o, void* v);						//////////////
 		static void	cb_colorSpaceChoice(Fl_Widget* o, void* v);			//////////////
 		static void	cb_rInput(Fl_Widget* o, void* v);					//////////////

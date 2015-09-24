@@ -95,6 +95,13 @@ void OriginalView::draw()
 	glFlush();
 }
 
+
+void OriginalView::cursor(Point& coord){
+	cursorPoint.x=coord.x;
+	cursorPoint.y = coord.y;
+	redraw();
+}
+
 void OriginalView::refresh()
 {
 	redraw();
@@ -106,11 +113,7 @@ void OriginalView::resizeWindow(int	width,
 	resize(x(), y(), width, height);
 }
 
-void OriginalView::cursor(Point& coord){
-	cursorPoint.x=coord.x;
-	cursorPoint.y = coord.y;
-	redraw();
-}
+
 
 
 

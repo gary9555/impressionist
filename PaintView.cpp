@@ -116,7 +116,12 @@ void PaintView::draw()
 		switch (eventToDo) 
 		{
 		case LEFT_MOUSE_DOWN:
-			//SaveCurrentContent();
+			//delete[] m_pDoc->m_ucUndo;
+			if (!m_pDoc->m_ucUndo)
+				m_pDoc->m_ucUndo = new unsigned char[m_pDoc->m_nPaintHeight*m_pDoc->m_nPaintWidth * 3];
+		//	SaveCurrentContent();
+			memcpy(m_pDoc->m_ucUndo, m_pDoc->m_ucPainting, m_pDoc->m_nPaintHeight*m_pDoc->m_nPaintWidth * 3);
+			
 			if (coord.x < m_nEndCol&&coord.y<m_nEndRow)
 				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
 			break; 
@@ -131,6 +136,7 @@ void PaintView::draw()
 			//LineBrush::brushFlag = 0;
 			SaveCurrentContent();
 			RestoreContent();
+			memcpy(m_pDoc->m_ucUndo, m_pDoc->m_ucPainting, sizeof(m_pDoc->m_ucPainting));
 			break;
 		case RIGHT_MOUSE_DOWN:
 			astarting.x = coord.x; 

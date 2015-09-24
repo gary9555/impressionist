@@ -19,6 +19,7 @@
 #include "ScatteredCircleBrush.h"
 #include "ScatteredLineBrush.h"
 #include "ScatteredPointBrush.h"
+#include "LoveBrush.h"
 
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
@@ -31,6 +32,7 @@ ImpressionistDoc::ImpressionistDoc()
 	m_nWidth		= -1;
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
+	m_ucUndo		= NULL;
 
 
 	// create one instance of each brush
@@ -50,6 +52,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new ScatteredLineBrush(this, "Scattered Lines");
 	ImpBrush::c_pBrushes[BRUSH_SCATTERED_CIRCLES]	
 		= new ScatteredCircleBrush(this, "Scattered Circles");
+	ImpBrush::c_pBrushes[BRUSH_LOVE]
+		= new LoveBrush(this, "Love");
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];
@@ -168,12 +172,16 @@ int ImpressionistDoc::loadImage(char *iname)
 	// release old storage
 	if ( m_ucBitmap ) delete [] m_ucBitmap;
 	if ( m_ucPainting ) delete [] m_ucPainting;
+	if ( m_ucUndo) delete[] m_ucUndo;
 
 	m_ucBitmap		= data;
 
 	// allocate space for draw view
 	m_ucPainting	= new unsigned char [width*height*3];
 	memset(m_ucPainting, 0, width*height*3);
+
+	m_ucUndo = new unsigned char[width*height * 3];
+	memset(m_ucUndo, 0, width*height * 3);
 
 	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(), 
 								m_pUI->m_mainWindow->y(), 
