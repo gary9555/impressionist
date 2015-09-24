@@ -8,6 +8,8 @@
 #include "impressionistDoc.h"
 #include "originalview.h"
 
+#include "PointBrush.h"
+
 #ifndef WIN32
 #define min(a, b)	( ( (a)<(b) ) ? (a) : (b) )
 #endif
@@ -39,6 +41,11 @@ void OriginalView::draw()
 		ortho();
 
 	}
+
+	
+
+
+
 
 	glClear( GL_COLOR_BUFFER_BIT );
 
@@ -74,9 +81,17 @@ void OriginalView::draw()
 		glPixelStorei( GL_UNPACK_ROW_LENGTH, m_pDoc->m_nWidth );
 		glDrawBuffer( GL_BACK );
 		glDrawPixels( drawWidth, drawHeight, GL_RGB, GL_UNSIGNED_BYTE, bitstart );
-
+			
+		glPointSize(5);
+		glBegin(GL_POINTS);
+		glColor3f(1, 0, 0);
+		glVertex2d(cursorPoint.x-9, m_nWindowHeight-cursorPoint.y-1);
+		glEnd();
+		
 	}
 			
+	
+
 	glFlush();
 }
 
@@ -90,4 +105,12 @@ void OriginalView::resizeWindow(int	width,
 {
 	resize(x(), y(), width, height);
 }
+
+void OriginalView::cursor(Point& coord){
+	cursorPoint.x=coord.x;
+	cursorPoint.y = coord.y;
+	redraw();
+}
+
+
 

@@ -31,6 +31,7 @@ public:
 	void RestoreContent();
 
 	ImpressionistDoc *m_pDoc;
+	OriginalView	 *m_pOrig;
 
 private:
 	GLvoid* m_pPaintBitstart;

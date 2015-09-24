@@ -28,6 +28,8 @@ public:
 	void draw();
 	void refresh();
 
+	void cursor(Point& coord);
+
 	void resizeWindow(int width, int height);
 
 	ImpressionistDoc*	m_pDoc;
@@ -35,6 +37,8 @@ public:
 private:
 	int	m_nWindowWidth, 
 		m_nWindowHeight;
+
+	Point cursorPoint;
 
 };
 

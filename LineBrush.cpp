@@ -115,7 +115,7 @@ void LineBrush::BrushMove(const Point source, const Point target)
 			angle = (int)(atan2(dy, dx)*57.32) % 360;
 
 			
-
+		
 			glMatrixMode(GL_MODELVIEW);
 				glPushMatrix();
 				glTranslatef(target.x, target.y, 0.0);

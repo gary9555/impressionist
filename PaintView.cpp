@@ -19,7 +19,7 @@
 #define RIGHT_MOUSE_DOWN	4
 #define RIGHT_MOUSE_DRAG	5
 #define RIGHT_MOUSE_UP		6
-
+#define MOUSE_MOVE			7
 
 #ifndef WIN32
 #define min(a, b)	( ( (a)<(b) ) ? (a) : (b) )
@@ -42,6 +42,8 @@ PaintView::PaintView(int			x,
 {
 	m_nWindowWidth	= w;
 	m_nWindowHeight	= h;
+	
+	
 
 }
 
@@ -81,6 +83,7 @@ void PaintView::draw()
 	int startrow = m_pDoc->m_nPaintHeight - (scrollpos.y + drawHeight);
 	if ( startrow < 0 ) startrow = 0;
 
+
 	m_pPaintBitstart = m_pDoc->m_ucPainting + 
 		3 * ((m_pDoc->m_nPaintWidth * startrow) + scrollpos.x);
 
@@ -93,7 +96,8 @@ void PaintView::draw()
 	m_nEndCol		= m_nStartCol + drawWidth;
 
 	if ( m_pDoc->m_ucPainting && !isAnEvent) 
-	{
+	{	
+		
 		RestoreContent();
 
 	}
@@ -107,14 +111,18 @@ void PaintView::draw()
 		Point source( coord.x + m_nStartCol, m_nEndRow - coord.y );
 		Point target( coord.x, m_nWindowHeight - coord.y );
 		
+		
 		// This is the event handler
 		switch (eventToDo) 
 		{
 		case LEFT_MOUSE_DOWN:
-			m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
-			break;
+			//SaveCurrentContent();
+			if (coord.x < m_nEndCol&&coord.y<m_nEndRow)
+				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+			break; 
 		case LEFT_MOUSE_DRAG:
-			m_pDoc->m_pCurrentBrush->BrushMove( source, target );
+			if (coord.x < m_nEndCol&&coord.y<m_nEndRow)
+				m_pDoc->m_pCurrentBrush->BrushMove( source, target );
 			break;
 		case LEFT_MOUSE_UP:
 			LineBrush::isRightMouse = false;
@@ -133,12 +141,17 @@ void PaintView::draw()
 			SaveCurrentContent();
 			break;
 		case RIGHT_MOUSE_DRAG:
+			RestoreContent();
+			
+			glLineWidth(2);
 			glBegin(GL_LINE_STRIP);
-			glColor3f(1, 0, 0);
-			glVertex2d(lstarting.x, lstarting.y);
-			glVertex2d(target.x, target.y);
+				glColor3f(1, 0, 0);
+				glVertex2d(lstarting.x, lstarting.y);
+				glVertex2d(target.x, target.y);
 			glEnd();
 			
+			
+			/*
 			glDrawBuffer(GL_FRONT);
 
 			glClear(GL_COLOR_BUFFER_BIT);
@@ -151,7 +164,8 @@ void PaintView::draw()
 				GL_RGB,
 				GL_UNSIGNED_BYTE,
 				m_pPaintBitstart);
-			//RestoreContent();
+				*/
+			
 			
 			break;
 		case RIGHT_MOUSE_UP:
@@ -163,7 +177,15 @@ void PaintView::draw()
 			RestoreContent();
 																// pass the starting and ending position of the mouse 
 			break;												// finished with right dragging
-
+	/*
+		case MOUSE_MOVE:
+			RestoreContent();
+			glBegin(GL_POINTS);
+			glColor3f(1, 0, 0);
+			glVertex2d(coord.x - m_nDrawWidth, coord.y);
+			glEnd();
+			break;
+	*/
 		default:
 			printf("Unknown event!!\n");		
 			break;
@@ -204,6 +226,7 @@ int PaintView::handle(int event)
 			eventToDo=RIGHT_MOUSE_DRAG;
 		else
 			eventToDo=LEFT_MOUSE_DRAG;
+		m_pDoc->m_pUI->m_origView->cursor(coord);
 		isAnEvent=1;
 		redraw();
 		break;
@@ -220,6 +243,11 @@ int PaintView::handle(int event)
 	case FL_MOVE:
 		coord.x = Fl::event_x();
 		coord.y = Fl::event_y();
+		
+		m_pDoc->m_pUI->m_origView->cursor(coord);
+		//isAnEvent = 1;
+		//eventToDo = MOUSE_MOVE;
+		//redraw();
 		break;
 	default:
 		return 0;
