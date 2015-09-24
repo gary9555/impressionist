@@ -11,6 +11,8 @@
 #include "ImpBrush.h"
 #include "LineBrush.h"
 #include "ScatteredLineBrush.h"
+#include "FilterBrush.h"
+
 
 
 #define LEFT_MOUSE_DOWN		1
@@ -136,9 +138,10 @@ void PaintView::draw()
 			//LineBrush::brushFlag = 0;
 			SaveCurrentContent();
 			RestoreContent();
-			memcpy(m_pDoc->m_ucUndo, m_pDoc->m_ucPainting, sizeof(m_pDoc->m_ucPainting));
+		//	memcpy(m_pDoc->m_ucUndo, m_pDoc->m_ucPainting, sizeof(m_pDoc->m_ucPainting));
 			break;
 		case RIGHT_MOUSE_DOWN:
+			FilterBrush::isBlur = !FilterBrush::isBlur;
 			astarting.x = coord.x; 
 			astarting.y = coord.y;
 			lstarting.x = target.x;

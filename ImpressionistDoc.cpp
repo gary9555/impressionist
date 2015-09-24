@@ -20,6 +20,7 @@
 #include "ScatteredLineBrush.h"
 #include "ScatteredPointBrush.h"
 #include "LoveBrush.h"
+#include "FilterBrush.h"
 
 
 #define DESTROY(p)	{  if ((p)!=NULL) {delete [] p; p=NULL; } }
@@ -54,6 +55,8 @@ ImpressionistDoc::ImpressionistDoc()
 		= new ScatteredCircleBrush(this, "Scattered Circles");
 	ImpBrush::c_pBrushes[BRUSH_LOVE]
 		= new LoveBrush(this, "Love");
+	ImpBrush::c_pBrushes[BRUSH_FILTER]
+		= new FilterBrush(this, "Filter");
 
 	// make one of the brushes current
 	m_pCurrentBrush	= ImpBrush::c_pBrushes[0];

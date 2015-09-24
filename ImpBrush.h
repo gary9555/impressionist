@@ -23,6 +23,7 @@ enum
 	BRUSH_SCATTERED_LINES,
 	BRUSH_SCATTERED_CIRCLES,
 	BRUSH_LOVE,
+	BRUSH_FILTER,
 	NUM_BRUSH_TYPE // Make sure this stays at the end!
 };
 

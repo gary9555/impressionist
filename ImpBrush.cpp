@@ -67,11 +67,16 @@ void ImpBrush::SetColor (const Point source)
 void ImpBrush::SetColorOpac(const Point source, double opacity)
 {
 	ImpressionistDoc* pDoc = GetDocument();
-
+	float r = pDoc->m_pUI->m_colorChooser->r();
+	float g = pDoc->m_pUI->m_colorChooser->g();
+	float b = pDoc->m_pUI->m_colorChooser->b();
 
 	GLubyte color[4];
 
 	memcpy(color, pDoc->GetOriginalPixel(source), 3);
+	color[0] *= r;
+	color[1] *= g;
+	color[2] *= b;
 	color[3] = opacity * 255;
 	//glColor3ubv(color);
 	glColor4ubv(color);
