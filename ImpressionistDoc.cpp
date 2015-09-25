@@ -146,6 +146,14 @@ double ImpressionistDoc::getDimmedAlpha()
 }
 
 //---------------------------------------------------------
+// Returns the alpha value of the brush.
+//---------------------------------------------------------
+int ImpressionistDoc::getSpacing()
+{
+	return m_pUI->getSpacing();
+}
+
+//---------------------------------------------------------
 // sets the size of the brush in the UI, thus read back by the pDOC
 //---------------------------------------------------------
 void ImpressionistDoc::setBrushSize(int size){
@@ -186,30 +194,30 @@ int ImpressionistDoc::loadImage(char *iname)
 
 	// release old storage
 	if (m_ucBitmap) { delete[] m_ucBitmap; m_ucBitmap = NULL; }
-	if (m_ucPainting) {delete[] m_ucPainting; m_ucPainting = NULL;
-	}
+	if (m_ucPainting) {delete[] m_ucPainting; m_ucPainting = NULL;}
 	if (m_ucUndo) { delete[] m_ucUndo; m_ucUndo = NULL; }
-	if (m_ucDissolve) {
-		delete[] m_ucDissolve; m_ucDissolve = NULL;
-	}
+	if (m_ucDimmed){ delete[] m_ucDimmed; m_ucDimmed = NULL; }
+	if (m_ucDissolve){ delete[] m_ucDissolve; m_ucDissolve = NULL; }
 	
 	
+	m_ucBitmap = new unsigned char[3 * width*height];
 	m_ucBitmap		= data;
+	//memcpy(m_ucBitmap, data, 3 * width*height);
+	
+	
+	m_ucDimmed = new unsigned char[width*height * 3];
+	memcpy(m_ucDimmed, m_ucBitmap, width*height * 3);
+	
 
-	m_ucDissolve = new unsigned char[width*height * 3];
-	memcpy(m_ucDissolve, data, width*height * 3);
-	// allocate space for draw view
 	m_ucPainting	= new unsigned char [width*height*3];
 	memset(m_ucPainting, 0, width*height*3);
 	
-//	m_ucDissolve = new unsigned char[width*height * 3];
-	//memcpy(m_ucDissolve, data, width*height * 3);
 
 	double dimAlpha = getDimmedAlpha();
 
 
 	for(int i = 0; i < width*height * 3; i++){
-		m_ucPainting[i] = m_ucPainting[i] * (1 - dimAlpha * 1) + m_ucDissolve[i] * dimAlpha * 1; // alpha mask set to all 1
+		m_ucPainting[i] = m_ucPainting[i] * (1 - dimAlpha * 1) + m_ucDimmed[i] * dimAlpha * 1; // alpha mask set to all 1
 	}
 	
 	m_ucUndo = new unsigned char[width*height * 3];
@@ -262,20 +270,17 @@ int ImpressionistDoc::loadAnotherImage(char *iname)
 	}
 	m_nNewPaintWidth = width;
 	m_nNewPaintHeight = height;
-
+	/*
 	// release old storage
-	if (m_ucBitmap) delete[] m_ucBitmap;
+	
 	//if (m_ucPainting) delete[] m_ucPainting;
 	//if (m_ucUndo) delete[] m_ucUndo;
-
+	m_ucBitmap = new unsigned char[m_nNewPaintWidth*m_nNewPaintHeight * 3];
+	memcpy(m_ucBitmap, data, m_nNewPaintWidth*m_nNewPaintHeight * 3);
+	*/
+	
 	m_ucBitmap = data;
-
-	// allocate space for draw view
-//	m_ucPainting = new unsigned char[width*height * 3];
-//	memset(m_ucPainting, 0, width*height * 3);
-
-	//m_ucUndo = new unsigned char[width*height * 3];
-	//memset(m_ucUndo, 0, width*height * 3);
+	
 
 	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(),
 		m_pUI->m_mainWindow->y(),
@@ -302,7 +307,7 @@ int ImpressionistDoc::loadDissolveImage(char *iname){
 	// try to open the image to read
 	unsigned char*	data;
 	int				width,
-		height;
+					height;
 
 	if ((data = readBMP(iname, width, height)) == NULL)
 	{
@@ -321,25 +326,22 @@ int ImpressionistDoc::loadDissolveImage(char *iname){
 	m_nDisPaintWidth = width;
 	m_nDisPaintHeight = height;
 
-	double alpha = getOpac();
+	double alpha = 0.5;
+		//getOpac();
 
 	// release old storage
 	//if (m_ucBitmap) delete[] m_ucBitmap;
 	//if (m_ucPainting) delete[] m_ucPainting;
 	//if (m_ucUndo) delete[] m_ucUndo;
-	m_ucDissolve = new unsigned char[3 * width*height];
-	m_ucDissolve = data;
-
+	//m_ucDissolve = data;
+	m_ucDissolve = new unsigned char[3 * m_nDisPaintWidth*m_nDisPaintWidth];
+	memcpy(m_ucDissolve, data, 3 * m_nDisPaintWidth*m_nDisPaintWidth);
+	//m_ucDissolve = data;
 	// calculate alpha blending value at each pixel
-	for (int i = 0; i < 3 * m_nDisPaintWidth*m_nDisPaintWidth; i++)
-		m_ucBitmap[i] = m_ucBitmap[i] * (1-alpha * 1) + m_ucDissolve[i] * alpha * 1; // alpha mask set to all 1
-
-	// allocate space for draw view
-	//	m_ucPainting = new unsigned char[width*height * 3];
-	//	memset(m_ucPainting, 0, width*height * 3);
-
-	//m_ucUndo = new unsigned char[width*height * 3];
-	//memset(m_ucUndo, 0, width*height * 3);
+	for (int i = 0; i < 3 * m_nDisPaintWidth*m_nDisPaintWidth; i++){
+		m_ucBitmap[i] = m_ucBitmap[i] * (1 - alpha * 1) + m_ucDissolve[i] * alpha * 1; // alpha mask set to all 1
+	}
+	
 
 	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(),
 		m_pUI->m_mainWindow->y(),

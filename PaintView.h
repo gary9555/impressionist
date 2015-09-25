@@ -44,6 +44,9 @@ private:
 			m_nWindowWidth, 
 			m_nWindowHeight;
 
+	double prevAlpha;
+	double currentAlpha;
+
 };
 
 #endif

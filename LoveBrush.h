@@ -21,6 +21,9 @@ public:
 
 	static bool isRightMouse;    // false: left mouse event ;  true: right mouse event 
 
+	void Auto(int startx, int endx, int starty, int endy, int w);
+
+
 };
 
 #endif

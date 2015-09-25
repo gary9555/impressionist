@@ -12,6 +12,9 @@
 #include "impressionistUI.h"
 #include "impressionistDoc.h"
 
+extern bool isDimEvent = false;
+extern bool isAuto = false;
+
 /*
 //------------------------------ Widget Examples -------------------------------------------------
 Here is some example code for all of the widgets that you may need to add to the 
@@ -468,7 +471,14 @@ void ImpressionistUI::cb_SizeRandButton(Fl_Widget* o, void* v){
 }
 
 void ImpressionistUI::cb_PaintButton(Fl_Widget* o, void* v){
+	
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+	ImpressionistDoc *pDoc = pUI->getDocument();
 
+	isAuto = true;
+	pUI->m_origView->refresh();
+
+	pUI->m_paintView->refresh();
 
 }
 
@@ -496,9 +506,11 @@ void ImpressionistUI::cb_SwapContentButton(Fl_Widget* o, void* v){
 }
 
 void ImpressionistUI::cb_DimmedAlphaSlides(Fl_Widget* o, void* v){
-
-	((ImpressionistUI*)(o->user_data()))->m_nDimmedAlpha = double(((Fl_Slider *)o)->value());
-
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+	ImpressionistDoc *pDoc = pUI->getDocument();
+	pUI->m_nDimmedAlpha = double(((Fl_Slider *)o)->value());
+	isDimEvent = true;
+	pUI->m_paintView->refresh();
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -890,6 +902,14 @@ void ImpressionistUI::setSize( int size )
 	else
 		m_BrushSizeSlider->value(40);
 
+}
+
+//---------------------------------------------------------
+// Returns the alpha value of the brush.
+//---------------------------------------------------------
+int ImpressionistUI::getSpacing()
+{
+	return m_nSpacing;
 }
 
 //-------------------------------------------------

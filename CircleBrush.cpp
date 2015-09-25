@@ -72,7 +72,37 @@ void CircleBrush::BrushMove(const Point source, const Point target)
 
 void CircleBrush::BrushEnd(const Point source, const Point target)
 {
-	// do nothing so far
+	
+}
+
+void CircleBrush::Auto(int startx, int endx, int starty, int endy, int w){
+	
+	ImpressionistDoc* pDoc = GetDocument();
+	ImpressionistUI* dlg = pDoc->m_pUI;
+	int size = pDoc->getSize();
+	int spacing = pDoc->getSpacing();
+	double alpha = pDoc->getOpac();
+	
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	
+	for (int i = startx; i < endx + 1; i += spacing){
+		for (int j = starty; j < endy + 1; j += spacing){
+			glBegin(GL_TRIANGLE_FAN);
+			SetColorOpac(Point(startx + i, endy - j), alpha);
+			glVertex2d(i, w - j);
+			for (float angle = 1.0f; angle<361.0f; angle += 0.2)
+			{
+				float x2 = i + sin(angle/57.3)*size;
+				float y2 = w - j + cos(angle/57.3)*size;
+				glVertex2f(x2, y2);
+			}
+			glEnd();
+		}
+	}
+	
 }
 
 char* CircleBrush::BrushName(void){

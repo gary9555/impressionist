@@ -20,6 +20,9 @@ public:
 	char* BrushName(void);
 
 	static bool isRightMouse;
+
+	void Auto(int startx, int endx, int starty, int endy, int w);
+
 };
 
 #endif

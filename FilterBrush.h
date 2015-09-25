@@ -21,6 +21,9 @@ public:
 	void Blur(const Point source, double opacity);
 	void Sharpen(const Point source, double opacity);
 	static bool isBlur;
+
+	void Auto(int startx, int endx, int starty, int endy, int w);
+
 };
 
 #endif

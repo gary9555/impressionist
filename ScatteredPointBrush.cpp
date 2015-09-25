@@ -67,6 +67,27 @@ void ScatteredPointBrush::BrushEnd(const Point source, const Point target)
 	// do nothing so far
 }
 
+void ScatteredPointBrush::Auto(int startx, int endx, int starty, int endy, int w){
+
+	ImpressionistDoc* pDoc = GetDocument();
+	ImpressionistUI* dlg = pDoc->m_pUI;
+	//int size = pDoc->getSize();
+	int spacing = pDoc->getSpacing();
+	//double alpha = pDoc->getOpac();
+
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+
+	for (int i = startx; i < endx + 1; i += spacing){
+		for (int j = starty; j < endy + 1; j += spacing){
+			BrushMove(Point(startx + i, endy - j), Point(i, w - j));
+		}
+	}
+}
+
+
 char* ScatteredPointBrush::BrushName(void){
 
 	return ImpBrush::BrushName();

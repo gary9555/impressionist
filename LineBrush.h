@@ -20,9 +20,8 @@ public:
 	char* BrushName(void);
 
 	static bool isRightMouse;    // false: left mouse event ;  true: right mouse event 
-	//static Point prev;
-	//static Point current;
-	//static int brushFlag;
+	
+	void Auto(int startx, int endx, int starty, int endy, int w);
 };
 
 #endif

@@ -57,6 +57,30 @@ void PointBrush::BrushEnd( const Point source, const Point target )
 	// do nothing so far
 }
 
+void PointBrush::Auto(int startx, int endx, int starty,int endy, int w)
+{
+	ImpressionistDoc* pDoc = GetDocument();
+	ImpressionistUI* dlg = pDoc->m_pUI;
+	int size = pDoc->getSize();
+	int spacing = pDoc->getSpacing();
+	double alpha = pDoc->getOpac();
+	glPointSize((float)size);
+	
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glBegin(GL_POINTS);
+	for (int i = startx; i < endx + 1; i+=spacing){
+		for (int j = starty; j < endy + 1; j+=spacing){
+			SetColorOpac(Point(startx+i,endy-j),alpha);
+			glVertex2d(i,w-j);
+		}
+	}
+	glEnd();
+	 
+}
+
+
 char* PointBrush::BrushName(void){
 	
 	return ImpBrush::BrushName();

@@ -129,8 +129,10 @@ public:
 	int					getAngle();
 	double				getAlpha();
 	double				getDimmedAlpha();
+	int					getSpacing();
 	void				setSize(int size);
 	void				setAngle(int angle);
+
 
 private:
 	ImpressionistDoc*	m_pDoc;		// pointer to document to communicate with the document

@@ -22,6 +22,8 @@
 #define RIGHT_MOUSE_DRAG	5
 #define RIGHT_MOUSE_UP		6
 #define MOUSE_MOVE			7
+#define DIM					8
+#define AUTO				9
 
 #ifndef WIN32
 #define min(a, b)	( ( (a)<(b) ) ? (a) : (b) )
@@ -34,6 +36,10 @@ static Point	coord;
 static Point	astarting;  // for the angle calculation
 static Point	ending;
 static Point	lstarting;   // for displaying the red line
+
+extern bool isDimEvent;
+extern bool isAuto;
+
 
 PaintView::PaintView(int			x, 
 					 int			y, 
@@ -103,12 +109,23 @@ void PaintView::draw()
 		RestoreContent();
 
 	}
+	
+	if (isDimEvent){
+		isAnEvent = 1;
+		eventToDo = DIM;
+		isDimEvent = false;
+	}
+	if (isAuto){
+		isAnEvent = 1;
+		eventToDo = AUTO;
+	}
 
 	if ( m_pDoc->m_ucPainting && isAnEvent) 
 	{
 
 		// Clear it after processing.
 		isAnEvent	= 0;	
+		
 
 		Point source( coord.x + m_nStartCol, m_nEndRow - coord.y );
 		Point target( coord.x, m_nWindowHeight - coord.y );
@@ -122,10 +139,11 @@ void PaintView::draw()
 			if (!m_pDoc->m_ucUndo)
 				m_pDoc->m_ucUndo = new unsigned char[m_pDoc->m_nPaintHeight*m_pDoc->m_nPaintWidth * 3];
 		//	SaveCurrentContent();
-			memcpy(m_pDoc->m_ucUndo, m_pDoc->m_ucPainting, m_pDoc->m_nPaintHeight*m_pDoc->m_nPaintWidth * 3);
 			
-			if (coord.x < m_nEndCol&&coord.y<m_nEndRow)
-				m_pDoc->m_pCurrentBrush->BrushBegin( source, target );
+			
+				memcpy(m_pDoc->m_ucUndo, m_pDoc->m_ucPainting, m_pDoc->m_nPaintHeight*m_pDoc->m_nPaintWidth * 3);
+				if (coord.x < m_nEndCol&&coord.y < m_nEndRow)
+					m_pDoc->m_pCurrentBrush->BrushBegin(source, target);
 			break; 
 		case LEFT_MOUSE_DRAG:
 			if (coord.x < m_nEndCol&&coord.y<m_nEndRow)
@@ -134,8 +152,9 @@ void PaintView::draw()
 		case LEFT_MOUSE_UP:
 			LineBrush::isRightMouse = false;
 			ScatteredLineBrush::isRightMouse = false;
-			m_pDoc->m_pCurrentBrush->BrushEnd( source, target );
-			//LineBrush::brushFlag = 0;
+													
+			m_pDoc->m_pCurrentBrush->BrushEnd(source, target);
+			
 			SaveCurrentContent();
 			RestoreContent();
 		//	memcpy(m_pDoc->m_ucUndo, m_pDoc->m_ucPainting, sizeof(m_pDoc->m_ucPainting));
@@ -159,23 +178,6 @@ void PaintView::draw()
 				glVertex2d(target.x, target.y);
 			glEnd();
 			
-			
-			/*
-			glDrawBuffer(GL_FRONT);
-
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			glRasterPos2i(0, m_nWindowHeight - m_nDrawHeight);
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			glPixelStorei(GL_UNPACK_ROW_LENGTH, m_pDoc->m_nPaintWidth);
-			glDrawPixels(m_nDrawWidth,
-				m_nDrawHeight,
-				GL_RGB,
-				GL_UNSIGNED_BYTE,
-				m_pPaintBitstart);
-				*/
-			
-			
 			break;
 		case RIGHT_MOUSE_UP:
 			LineBrush::isRightMouse = true;
@@ -186,15 +188,27 @@ void PaintView::draw()
 			RestoreContent();
 																// pass the starting and ending position of the mouse 
 			break;												// finished with right dragging
-	/*
-		case MOUSE_MOVE:
-			RestoreContent();
-			glBegin(GL_POINTS);
-			glColor3f(1, 0, 0);
-			glVertex2d(coord.x - m_nDrawWidth, coord.y);
-			glEnd();
+	
+		case DIM:
 			break;
-	*/
+			/*
+			currentAlpha=m_pDoc->getDimmedAlpha();
+			for (int i = 0;i< m_nDrawWidth*m_nDrawHeight * 3; i++){
+				m_pDoc->m_ucBitmap[i] = m_pDoc->m_ucBitmap[i] * (1 - currentAlpha * 1) + m_pDoc->m_ucDissolve[i] * currentAlpha * 1;
+			}
+			m_pDoc->m_ucDimmed
+			prevAlpha = currentAlpha;
+			isDimEvent = false;
+			break;
+			*/
+		
+		case AUTO:
+			m_pDoc->m_pCurrentBrush->Auto(m_nStartCol, m_nEndCol, m_nStartRow, m_nEndRow, m_nWindowHeight);
+			SaveCurrentContent(); 
+			//RestoreContent();
+			isAuto = false;
+			break;
+		
 		default:
 			printf("Unknown event!!\n");		
 			break;
