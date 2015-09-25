@@ -34,6 +34,9 @@ ImpressionistDoc::ImpressionistDoc()
 	m_ucBitmap		= NULL;
 	m_ucPainting	= NULL;
 	m_ucUndo		= NULL;
+	m_ucDissolve = NULL;
+	m_ucDimmed = NULL;
+
 
 
 	// create one instance of each brush
@@ -135,6 +138,14 @@ double ImpressionistDoc::getOpac()
 }
 
 //---------------------------------------------------------
+// Returns the alpha value of the brush.
+//---------------------------------------------------------
+double ImpressionistDoc::getDimmedAlpha()
+{
+	return m_pUI->getDimmedAlpha();
+}
+
+//---------------------------------------------------------
 // sets the size of the brush in the UI, thus read back by the pDOC
 //---------------------------------------------------------
 void ImpressionistDoc::setBrushSize(int size){
@@ -153,36 +164,54 @@ void ImpressionistDoc::setBrushAngle(int angle){
 // This is called by the UI when the load image button is 
 // pressed.
 //---------------------------------------------------------
-int ImpressionistDoc::loadImage(char *iname) 
+
+int ImpressionistDoc::loadImage(char *iname)
 {
 	// try to open the image to read
 	unsigned char*	data;
-	int				width, 
-					height;
+	int				width,
+		height;
 
-	if ( (data=readBMP(iname, width, height))==NULL ) 
+	if ((data = readBMP(iname, width, height)) == NULL)
 	{
 		fl_alert("Can't load bitmap file");
 		return 0;
 	}
 
 	// reflect the fact of loading the new image
-	m_nWidth		= width;
-	m_nPaintWidth	= width;
-	m_nHeight		= height;
-	m_nPaintHeight	= height;
+	m_nWidth = width;
+	m_nPaintWidth = width;
+	m_nHeight = height;
+	m_nPaintHeight = height;
 
 	// release old storage
-	if ( m_ucBitmap ) delete [] m_ucBitmap;
-	if ( m_ucPainting ) delete [] m_ucPainting;
-	if ( m_ucUndo) delete[] m_ucUndo;
-
+	if (m_ucBitmap) { delete[] m_ucBitmap; m_ucBitmap = NULL; }
+	if (m_ucPainting) {delete[] m_ucPainting; m_ucPainting = NULL;
+	}
+	if (m_ucUndo) { delete[] m_ucUndo; m_ucUndo = NULL; }
+	if (m_ucDissolve) {
+		delete[] m_ucDissolve; m_ucDissolve = NULL;
+	}
+	
+	
 	m_ucBitmap		= data;
 
+	m_ucDissolve = new unsigned char[width*height * 3];
+	memcpy(m_ucDissolve, data, width*height * 3);
 	// allocate space for draw view
 	m_ucPainting	= new unsigned char [width*height*3];
 	memset(m_ucPainting, 0, width*height*3);
+	
+//	m_ucDissolve = new unsigned char[width*height * 3];
+	//memcpy(m_ucDissolve, data, width*height * 3);
 
+	double dimAlpha = getDimmedAlpha();
+
+
+	for(int i = 0; i < width*height * 3; i++){
+		m_ucPainting[i] = m_ucPainting[i] * (1 - dimAlpha * 1) + m_ucDissolve[i] * dimAlpha * 1; // alpha mask set to all 1
+	}
+	
 	m_ucUndo = new unsigned char[width*height * 3];
 	memset(m_ucUndo, 0, width*height * 3);
 
@@ -202,6 +231,8 @@ int ImpressionistDoc::loadImage(char *iname)
 
 	return 1;
 }
+
+
 
 //---------------------------------------------------------
 // Load Another image
@@ -263,6 +294,10 @@ int ImpressionistDoc::loadAnotherImage(char *iname)
 	return 1;
 }
 
+//---------------------------------------------------------
+// to dissolve anther image into the current image, 
+// dimensions must meet
+//---------------------------------------------------------
 int ImpressionistDoc::loadDissolveImage(char *iname){
 	// try to open the image to read
 	unsigned char*	data;
@@ -271,27 +306,33 @@ int ImpressionistDoc::loadDissolveImage(char *iname){
 
 	if ((data = readBMP(iname, width, height)) == NULL)
 	{
-		fl_alert("Can't load another bitmap file");
+		fl_alert("Can't load dissolve bitmap file");
 		return 0;
 	}
 
 	// reflect the fact of loading the new image
-	m_nNewWidth = width;
-	m_nNewHeight = height;
+	m_nDisWidth = width;
+	m_nDisHeight = height;
 
-	if (m_nNewWidth != m_nWidth || m_nNewHeight != m_nHeight){
+	if (m_nDisWidth != m_nWidth || m_nDisHeight != m_nHeight){
 		fl_alert("Different Dimensions!");
 		return 0;
 	}
-	m_nNewPaintWidth = width;
-	m_nNewPaintHeight = height;
+	m_nDisPaintWidth = width;
+	m_nDisPaintHeight = height;
+
+	double alpha = getOpac();
 
 	// release old storage
-	if (m_ucBitmap) delete[] m_ucBitmap;
+	//if (m_ucBitmap) delete[] m_ucBitmap;
 	//if (m_ucPainting) delete[] m_ucPainting;
 	//if (m_ucUndo) delete[] m_ucUndo;
+	m_ucDissolve = new unsigned char[3 * width*height];
+	m_ucDissolve = data;
 
-	m_ucBitmap = data;
+	// calculate alpha blending value at each pixel
+	for (int i = 0; i < 3 * m_nDisPaintWidth*m_nDisPaintWidth; i++)
+		m_ucBitmap[i] = m_ucBitmap[i] * (1-alpha * 1) + m_ucDissolve[i] * alpha * 1; // alpha mask set to all 1
 
 	// allocate space for draw view
 	//	m_ucPainting = new unsigned char[width*height * 3];

@@ -36,6 +36,7 @@ public:
 	int		getWidth();						// get the UI width
 	int		getAngle();						// get the UI angle
 	double	getOpac();						// get the UI alpha
+	double  getDimmedAlpha();				// get the dissolve alpha
 
 	void	setBrushSize(int size);			// set the UI size
 	void	setBrushAngle(int angle);		// set the UI angle
@@ -48,15 +49,20 @@ public:
 	int				m_nWidth, 
 					m_nHeight,
 					m_nNewWidth,
-					m_nNewHeight;
+					m_nNewHeight,
+					m_nDisWidth,
+					m_nDisHeight;
 	// Dimensions of the paint window.
-	int				m_nPaintWidth, m_nNewPaintWidth,
-					m_nPaintHeight, m_nNewPaintHeight;
+	int				m_nPaintWidth, m_nNewPaintWidth, m_nDisPaintWidth,
+					m_nPaintHeight, m_nNewPaintHeight, m_nDisPaintHeight;
 	// Bitmaps for original image and painting.
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;
 	
 	unsigned char*  m_ucUndo;	// to store the undo function bitmap
+	unsigned char*  m_ucDissolve;	// to store the dissolve image bitmap
+	unsigned char*  m_ucDimmed;	// to store the dimmed image bitmap
+
 
 
 	// The current active brush.

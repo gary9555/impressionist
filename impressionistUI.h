@@ -71,6 +71,7 @@ public:
 	Fl_Light_Button*	m_EdgeClippingButton;
 	Fl_Light_Button*	m_AnotherGradientButton;
 	Fl_Button*          m_SwapContent;
+	Fl_Slider*			m_DimmedAlphaSlider;
 		
 	Fl_Box*				m_SpacingBox;
 	Fl_Slider*			m_SpacingSlider;
@@ -127,6 +128,7 @@ public:
 	int					getWidth();
 	int					getAngle();
 	double				getAlpha();
+	double				getDimmedAlpha();
 	void				setSize(int size);
 	void				setAngle(int angle);
 
@@ -141,15 +143,16 @@ private:
 	double  m_nAlpha;
 	int		m_nSpacing;
 	int		m_nEdgeThres;
+	double  m_nDimmedAlpha;
 
 	bool	m_bEdgeClipping;
 	bool	m_bAnotherGrad;
 	bool	m_bSizeRand;
+
+
 	
 	//color
-	double	m_rInputValue;
-	double	m_gInputValue;
-	double	m_bInputValue;
+	
 
 	//paintly
 	int		m_nThres;
@@ -204,6 +207,7 @@ private:
 		static void cb_edgeThresSlides(Fl_Widget* o, void* v);			/////////////
 		static void cb_DoItButton(Fl_Widget* o, void* v);				/////////////
 		static void cb_SwapContentButton(Fl_Widget* o, void* v);		/////////////
+		static void cb_DimmedAlphaSlides(Fl_Widget* o, void* v);
 	static void	cb_clear_canvas(Fl_Menu_* o, void* v);
 	static void	cb_undo(Fl_Menu_* o, void* v);							//////////////
 	static void	cb_colors(Fl_Menu_* o, void* v);						//////////////
@@ -233,6 +237,8 @@ private:
 		static void	cb_jvSlides(Fl_Widget* o, void* v);					//////////////
 	static void cb_load_edge_image(Fl_Menu_* o, void* v);				//////////////
 	static void cb_load_another_image(Fl_Menu_* o, void* v);			//////////////
+	static void cb_load_dissolve_image(Fl_Menu_* o, void* v);			//////////////
+
 	static void	cb_exit(Fl_Menu_* o, void* v);
 
 	// Display menu

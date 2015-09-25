@@ -198,6 +198,16 @@ void ImpressionistUI::cb_load_another_image(Fl_Menu_* o, void* v){
 	}
 }
 
+void ImpressionistUI::cb_load_dissolve_image(Fl_Menu_* o, void* v){
+
+	ImpressionistDoc *pDoc = whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadDissolveImage(newfile);
+	}
+}
+
 //------------------------------------------------------------------
 // Brings up a file chooser and then saves the painted image
 // This is called by the UI when the save image menu item is chosen
@@ -482,6 +492,12 @@ void ImpressionistUI::cb_SwapContentButton(Fl_Widget* o, void* v){
 	pUI->m_origView->refresh();
 	pUI->m_paintView->refresh();
 
+
+}
+
+void ImpressionistUI::cb_DimmedAlphaSlides(Fl_Widget* o, void* v){
+
+	((ImpressionistUI*)(o->user_data()))->m_nDimmedAlpha = double(((Fl_Slider *)o)->value());
 
 }
 
@@ -854,6 +870,14 @@ double ImpressionistUI::getAlpha()
 	return m_nAlpha;
 }
 
+//------------------------------------------------
+// Return the dissolved image alpha value
+//------------------------------------------------
+double ImpressionistUI::getDimmedAlpha()
+{
+	return m_nDimmedAlpha;
+}
+
 //-------------------------------------------------
 // Set the brush size
 //-------------------------------------------------
@@ -894,8 +918,8 @@ Fl_Menu_Item ImpressionistUI::menuitems[] = {
 		{ "&Paintly...",	FL_ALT + 'p', (Fl_Callback *)ImpressionistUI::cb_paintly, 0, FL_MENU_DIVIDER },
 
 		{ "Load Edge Image...",		FL_ALT + 'e', (Fl_Callback *)ImpressionistUI::cb_load_edge_image },
-		{ "Load Another Image...",  FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image, 0, FL_MENU_DIVIDER },
-
+		{ "Load Another Image...",  FL_ALT + 'a', (Fl_Callback *)ImpressionistUI::cb_load_another_image },
+		{ "Load Dissolve Image...",	FL_ALT + 'd', (Fl_Callback *)ImpressionistUI::cb_load_dissolve_image, 0, FL_MENU_DIVIDER },
 		{ "&Quit",			 FL_ALT + 'q', (Fl_Callback *)ImpressionistUI::cb_exit },
 		{ 0 },
 
@@ -1018,11 +1042,12 @@ ImpressionistUI::ImpressionistUI() {
 	m_nSpacing = 4;
 	m_bSizeRand = TRUE;
 	m_nEdgeThres = 200;
+	m_nDimmedAlpha = 0.00;
 	//Paintly
 	 
 
 	// brush dialog definition
-	m_brushDialog = new Fl_Window(415, 335, "Brush Dialog");
+	m_brushDialog = new Fl_Window(415, 370, "Brush Dialog");
 		// Add a brush type choice to the dialog
 		m_BrushTypeChoice = new Fl_Choice(50,10,150,25,"&Brush");
 		m_BrushTypeChoice->user_data((void*)(this));	// record self to be used by static callback functions
@@ -1161,6 +1186,18 @@ ImpressionistUI::ImpressionistUI() {
 		m_PaintButton->user_data((void*)(this));
 		m_PaintButton->callback(cb_SwapContentButton);
 
+		// Dimmed alpha slider for the original image to stay in the background
+		m_DimmedAlphaSlider = new Fl_Value_Slider(20, 325, 200, 25, "DimAlpha");
+		m_DimmedAlphaSlider->user_data((void*)(this));	// record self to be used by static callback functions
+		m_DimmedAlphaSlider->type(FL_HOR_NICE_SLIDER);
+		m_DimmedAlphaSlider->labelfont(FL_COURIER);
+		m_DimmedAlphaSlider->labelsize(12);
+		m_DimmedAlphaSlider->minimum(0.00);
+		m_DimmedAlphaSlider->maximum(1.00);
+		m_DimmedAlphaSlider->step(0.01);
+		m_DimmedAlphaSlider->value(m_nDimmedAlpha);
+		m_DimmedAlphaSlider->align(FL_ALIGN_RIGHT);
+		m_DimmedAlphaSlider->callback(cb_DimmedAlphaSlides);
 
     m_brushDialog->end();	
 
