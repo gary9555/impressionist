@@ -203,6 +203,119 @@ int ImpressionistDoc::loadImage(char *iname)
 	return 1;
 }
 
+//---------------------------------------------------------
+// Load Another image
+// This is called by the UI when the load another image button is 
+// pressed.
+//---------------------------------------------------------
+int ImpressionistDoc::loadAnotherImage(char *iname)
+{
+	// try to open the image to read
+	unsigned char*	data;
+	int				width,
+					height;
+
+	if ((data = readBMP(iname, width, height)) == NULL)
+	{
+		fl_alert("Can't load another bitmap file");
+		return 0;
+	}
+
+	// reflect the fact of loading the new image
+	m_nNewWidth = width;
+	m_nNewHeight = height;
+
+	if (m_nNewWidth != m_nWidth || m_nNewHeight != m_nHeight){
+		fl_alert("Different Dimensions!");
+		return 0;
+	}
+	m_nNewPaintWidth = width;
+	m_nNewPaintHeight = height;
+
+	// release old storage
+	if (m_ucBitmap) delete[] m_ucBitmap;
+	//if (m_ucPainting) delete[] m_ucPainting;
+	//if (m_ucUndo) delete[] m_ucUndo;
+
+	m_ucBitmap = data;
+
+	// allocate space for draw view
+//	m_ucPainting = new unsigned char[width*height * 3];
+//	memset(m_ucPainting, 0, width*height * 3);
+
+	//m_ucUndo = new unsigned char[width*height * 3];
+	//memset(m_ucUndo, 0, width*height * 3);
+
+	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(),
+		m_pUI->m_mainWindow->y(),
+		width * 2,
+		height + 25);
+
+	// display it on origView
+	m_pUI->m_origView->resizeWindow(width, height);
+	m_pUI->m_origView->refresh();
+
+	// refresh paint view as well
+	m_pUI->m_paintView->resizeWindow(width, height);
+	m_pUI->m_paintView->refresh();
+
+
+	return 1;
+}
+
+int ImpressionistDoc::loadDissolveImage(char *iname){
+	// try to open the image to read
+	unsigned char*	data;
+	int				width,
+		height;
+
+	if ((data = readBMP(iname, width, height)) == NULL)
+	{
+		fl_alert("Can't load another bitmap file");
+		return 0;
+	}
+
+	// reflect the fact of loading the new image
+	m_nNewWidth = width;
+	m_nNewHeight = height;
+
+	if (m_nNewWidth != m_nWidth || m_nNewHeight != m_nHeight){
+		fl_alert("Different Dimensions!");
+		return 0;
+	}
+	m_nNewPaintWidth = width;
+	m_nNewPaintHeight = height;
+
+	// release old storage
+	if (m_ucBitmap) delete[] m_ucBitmap;
+	//if (m_ucPainting) delete[] m_ucPainting;
+	//if (m_ucUndo) delete[] m_ucUndo;
+
+	m_ucBitmap = data;
+
+	// allocate space for draw view
+	//	m_ucPainting = new unsigned char[width*height * 3];
+	//	memset(m_ucPainting, 0, width*height * 3);
+
+	//m_ucUndo = new unsigned char[width*height * 3];
+	//memset(m_ucUndo, 0, width*height * 3);
+
+	m_pUI->m_mainWindow->resize(m_pUI->m_mainWindow->x(),
+		m_pUI->m_mainWindow->y(),
+		width * 2,
+		height + 25);
+
+	// display it on origView
+	m_pUI->m_origView->resizeWindow(width, height);
+	m_pUI->m_origView->refresh();
+
+	// refresh paint view as well
+	m_pUI->m_paintView->resizeWindow(width, height);
+	m_pUI->m_paintView->refresh();
+
+
+	return 1;
+}
 
 //----------------------------------------------------------------
 // Save the specified image

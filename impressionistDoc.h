@@ -21,6 +21,10 @@ public:
 
 	int		loadImage(char *iname);			// called by the UI to load image
 	int		saveImage(char *iname);			// called by the UI to save image
+	int		loadAnotherImage(char *iname);			// called by the UI to load another image
+	int		loadDissolveImage(char *iname);			// called by the UI to load a dissolved image
+
+
 
 
 	int     clearCanvas();                  // called by the UI to clear the drawing canvas
@@ -42,10 +46,12 @@ public:
 public:
 	// Dimensions of original window.
 	int				m_nWidth, 
-					m_nHeight;
+					m_nHeight,
+					m_nNewWidth,
+					m_nNewHeight;
 	// Dimensions of the paint window.
-	int				m_nPaintWidth, 
-					m_nPaintHeight;	
+	int				m_nPaintWidth, m_nNewPaintWidth,
+					m_nPaintHeight, m_nNewPaintHeight;
 	// Bitmaps for original image and painting.
 	unsigned char*	m_ucBitmap;
 	unsigned char*	m_ucPainting;

@@ -183,6 +183,20 @@ void ImpressionistUI::cb_load_image(Fl_Menu_* o, void* v)
 	}
 }
 
+void ImpressionistUI::cb_load_edge_image(Fl_Menu_* o, void* v){
+	
+	
+}
+
+void ImpressionistUI::cb_load_another_image(Fl_Menu_* o, void* v){
+	
+	ImpressionistDoc *pDoc = whoami(o)->getDocument();
+
+	char* newfile = fl_file_chooser("Open File?", "*.bmp", pDoc->getImageName());
+	if (newfile != NULL) {
+		pDoc->loadAnotherImage(newfile);
+	}
+}
 
 //------------------------------------------------------------------
 // Brings up a file chooser and then saves the painted image
@@ -270,13 +284,7 @@ void ImpressionistUI::cb_colors(Fl_Menu_* o, void* v)
 
 
 
-void ImpressionistUI::cb_load_edge_image(Fl_Menu_* o, void* v){
 
-}
-
-void ImpressionistUI::cb_load_another_image(Fl_Menu_* o, void* v){
-
-}
 
 void ImpressionistUI::cb_originalImage(Fl_Menu_* o, void* v){
 
