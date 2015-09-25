@@ -14,7 +14,7 @@
 
 extern bool isDimEvent = false;
 extern bool isAuto = false;
-
+extern bool isEdge = false;
 /*
 //------------------------------ Widget Examples -------------------------------------------------
 Here is some example code for all of the widgets that you may need to add to the 
@@ -483,10 +483,16 @@ void ImpressionistUI::cb_PaintButton(Fl_Widget* o, void* v){
 }
 
 void ImpressionistUI::cb_edgeThresSlides(Fl_Widget* o, void* v){
-
+	
+	((ImpressionistUI*)(o->user_data()))->m_nEdgeThres = int(((Fl_Slider *)o)->value());
 }
 
 void ImpressionistUI::cb_DoItButton(Fl_Widget* o, void* v){
+
+	ImpressionistUI *pUI = ((ImpressionistUI*)(o->user_data()));
+	ImpressionistDoc *pDoc = pUI->getDocument();
+	isEdge = true;
+	pUI->m_origView->refresh();
 
 }
 
@@ -883,6 +889,14 @@ double ImpressionistUI::getAlpha()
 }
 
 //------------------------------------------------
+// Return the edge threshold value
+//------------------------------------------------
+int ImpressionistUI::getEdgeThres()
+{
+	return m_nEdgeThres;
+}
+
+//------------------------------------------------
 // Return the dissolved image alpha value
 //------------------------------------------------
 double ImpressionistUI::getDimmedAlpha()
@@ -1094,7 +1108,7 @@ ImpressionistUI::ImpressionistUI() {
 		m_BrushSizeSlider->type(FL_HOR_NICE_SLIDER);
         m_BrushSizeSlider->labelfont(FL_COURIER);
         m_BrushSizeSlider->labelsize(12);
-		m_BrushSizeSlider->minimum(1);
+		m_BrushSizeSlider->minimum(0);
 		m_BrushSizeSlider->maximum(40);
 		m_BrushSizeSlider->step(1);
 		m_BrushSizeSlider->value(m_nSize);

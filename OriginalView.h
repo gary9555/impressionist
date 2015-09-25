@@ -32,6 +32,13 @@ public:
 
 	void resizeWindow(int width, int height);
 
+	void doEdgeThres(int startx, int endx, int starty, int endy,int w);
+
+	int calIntensity(const Point source);
+
+	void RestoreContent();
+	void SaveCurrentContent();
+	
 	ImpressionistDoc*	m_pDoc;
 
 private:

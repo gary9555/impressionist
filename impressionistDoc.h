@@ -38,6 +38,7 @@ public:
 	double	getOpac();						// get the UI alpha
 	double  getDimmedAlpha();				// get the dissolve alpha
 	int		getSpacing();
+	int		getEdgeThres();
 
 	void	setBrushSize(int size);			// set the UI size
 	void	setBrushAngle(int angle);		// set the UI angle

@@ -114,6 +114,14 @@ int ImpressionistDoc::getSize()
 }
 
 //---------------------------------------------------------
+// Returns the edge threshold of the brush.
+//---------------------------------------------------------
+int ImpressionistDoc::getEdgeThres()
+{
+	return m_pUI->getEdgeThres();
+}
+
+//---------------------------------------------------------
 // Returns the width of the brush.
 //---------------------------------------------------------
 int ImpressionistDoc::getWidth()

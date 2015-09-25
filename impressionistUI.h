@@ -130,6 +130,7 @@ public:
 	double				getAlpha();
 	double				getDimmedAlpha();
 	int					getSpacing();
+	int					getEdgeThres();
 	void				setSize(int size);
 	void				setAngle(int angle);
 
